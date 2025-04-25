@@ -1,4 +1,4 @@
-# GameHub Meta 🎮🛍️
+# GameHub Meta
 
 A smart meta-store for gamers to:
 - Compare game prices across digital & physical stores
@@ -11,7 +11,7 @@ A smart meta-store for gamers to:
 
 ---
 
-## 📦 Features
+## Features
 
 - 🕹️ Platform & Store filtering (PC, PlayStation, Xbox, Nintendo)
 - 💿 Support for physical media deals (e.g. Amazon, Bol)
@@ -29,7 +29,7 @@ A smart meta-store for gamers to:
 
 ---
 
-## 📐 Architecture Overview
+## Architecture Overview
 
 This project explores two architectural models:
 
@@ -63,9 +63,9 @@ This project explores two architectural models:
 
 ---
 
-## 🧠 ICT Architecture Highlights
+## ICT Architecture Highlights
 
-- 🎯 **Driving Characteristics** (see full report):
+- **Driving Characteristics** (see full report):
   - Scalability
   - Availability
   - Maintainability
