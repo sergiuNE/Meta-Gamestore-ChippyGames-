@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: game-platform
+  template:
+    metadata:
+      labels:
+        app: game-platform
+    spec:
+      containers:
+        - name: app-container
+          image: jouwdockerimage:latest
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: app-config
