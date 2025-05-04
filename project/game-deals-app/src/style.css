@@ -39,7 +39,6 @@ header {
 .brand {
   color: #ccc;
   font-size: 0.9rem;
-  margin-top: 4px;
 }
 
 .header-right {
@@ -59,7 +58,7 @@ header {
 .login-button {
   background: white;
   color: black;
-  padding: 0.5rem 1rem;
+  padding: 1rem 1rem;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -101,27 +100,29 @@ h1 {
 }
 
 .search-bar {
-  position: relative;
-  max-width: 500px;
-  margin: 0 auto;
-  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  transition: all 0.3s ease;
 }
 
-.search-icon {
+.search-bar.top-right {
   position: absolute;
-  top: 50%;
-  left: 1rem;
-  transform: translateY(-50%);
-  color: gray;
+  top: 15px;
+  right: 270px; 
+  margin-top: 0;
+  justify-content: flex-end;
 }
 
 .search-bar input {
   width: 100%;
-  padding: 1rem 1rem 1rem 3rem;
-  border-radius: 9999px;
-  border: none;
+  padding: 13px 12px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
   outline: none;
-  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
 footer {
@@ -136,4 +137,53 @@ footer {
 footer a {
   color: white;
   text-decoration: none;
+}
+
+.game-card {
+  width: 250px;
+  background: white;
+  border-radius: 16px;
+  padding: 12px;
+  margin: 16px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: inline-block;
+  vertical-align: top;
+  text-align: left;
+}
+
+.game-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.card-content {
+  font-size: 14px;
+  color: #000;
+}
+
+.sale {
+  color: red;
+  font-weight: bold;
+}
+
+.price {
+  color: darkred;
+  font-size: 16px;
+}
+
+.rate-button {
+  background-color: #444;
+  color: white;
+  padding: 6px 12px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-style: italic;
+}
+
+.rate-button:hover {
+  background-color: #666;
 }
