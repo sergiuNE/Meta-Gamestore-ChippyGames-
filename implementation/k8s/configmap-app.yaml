@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: app-config
-data:
-  STORE_API_URL: "https://store.example.com"
-  NOTIFICATION_SERVICE_URL: "https://notify.example.com"

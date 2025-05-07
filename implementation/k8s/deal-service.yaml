@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deal-servce
+  name: deal-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: deal-servce
+      app: deal-service
   template:
     metadata:
       labels:
-        app: deal-servce
+        app: deal-service
     spec:
       containers:
-        - name: deal-servce
-          image: deal-servce
+        - name: deal-service
+          image: deal-service
           imagePullPolicy: Never
           ports:
-            - containerPort: 3000
+            - containerPort: 3004
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: deal-servce
+  name: deal-service
 spec:
   selector:
-    app: deal-servce
+    app: deal-service
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 3000
+      targetPort: 3004

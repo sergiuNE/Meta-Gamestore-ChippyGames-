@@ -1,0 +1,104 @@
+version: "3.8"
+
+services:
+  frontend:
+    build: .
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./:/app
+      - /app/node_modules # Voorkomt dat node_modules wordt overschreven
+    environment:
+      - VITE_API_PLATFORM_URL=http://localhost:3002
+      - VITE_API_GAME_URL=http://localhost:3001
+      - VITE_API_USER_URL=http://localhost:3003
+      - VITE_API_DEAL_URL=http://localhost:3004
+
+  platform-service:
+    build: ./platform-service
+    ports:
+      - "3002:3002"
+    depends_on:
+      - platforms-db
+    environment:
+      DB_HOST: platforms-db
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: platforms
+
+  game-service:
+    build: ./game-service
+    ports:
+      - "3001:3001"
+
+  user-service:
+    build: ./user-service
+    ports:
+      - "3003:3003"
+    depends_on:
+      - users-db
+    environment:
+      DB_HOST: users-db
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: users
+
+  users-db:
+    image: mysql:8.0
+    container_name: users-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: users
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./databases/users/users.sql:/docker-entrypoint-initdb.d/users.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  deals-db:
+    image: mysql:8.0
+    container_name: deals-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: deals
+    ports:
+      - "3309:3306"
+    volumes:
+      - ./databases/deals/deals.sql:/docker-entrypoint-initdb.d/deals.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  deal-service:
+    build: ./deal-service
+    ports:
+      - "3004:3004"
+    depends_on:
+      - deals-db
+    environment:
+      DB_HOST: deals-db
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: deals
+
+  platforms-db:
+    image: mysql:8.0
+    container_name: platforms-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: platforms
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./databases/platforms/platforms.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

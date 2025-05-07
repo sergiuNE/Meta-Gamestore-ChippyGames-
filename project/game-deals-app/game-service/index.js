@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const PORT = 3001; // Let op de juiste poort, 3001 als de frontend 3000 gebruikt
+const PORT = 3001;
 const cors = require("cors");
 app.use(cors());
 
@@ -8,21 +8,21 @@ const games = [
   {
     id: 1,
     title: "Elden Ring",
-    platforms: ["PC", "Playstation", "Playstation 5", "Xbox", "Nintendo"],
+    platforms: ["PC", "PlayStation 4", "PlayStation 5", "Xbox", "Nintendo"],
     genre: "Action",
     rating: 5,
-    price: "60.00€",
-    sale: "20%",
+    //price: "60.00€",
+    //sale: "20%",
     saleFrom: "Amazon",
   },
   {
     id: 2,
     title: "Grand Theft Auto V",
-    platforms: ["PC", "Playstation", "Playstation 5", "Xbox", "Nintendo"],
+    platforms: ["PC", "PlayStation 4", "PlayStation 5", "Xbox", "Nintendo"],
     genre: "Action",
     rating: 4,
-    price: "45.00€",
-    sale: "25%",
+    //price: "45.00€",
+    //sale: "25%",
     saleFrom: "MediaMarkt",
   },
 ];

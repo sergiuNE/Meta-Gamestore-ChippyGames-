@@ -109,8 +109,8 @@ h1 {
 
 .search-bar.top-right {
   position: absolute;
-  top: 15px;
-  right: 270px; 
+  top: 17px; /*15px*/
+  right: 285px;
   margin-top: 0;
   justify-content: flex-end;
 }
