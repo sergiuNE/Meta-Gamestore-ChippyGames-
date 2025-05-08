@@ -18,6 +18,15 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 3002
+          env:
+            - name: DB_HOST
+              value: "platforms-db"
+            - name: DB_USER
+              value: "root"
+            - name: DB_PASSWORD
+              value: "root"
+            - name: DB_NAME
+              value: "platforms"
 ---
 apiVersion: v1
 kind: Service

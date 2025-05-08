@@ -18,6 +18,15 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 3004
+          env:
+            - name: DB_HOST
+              value: "deals-db"
+            - name: DB_USER
+              value: "root"
+            - name: DB_PASSWORD
+              value: "root"
+            - name: DB_NAME
+              value: "deals"
 ---
 apiVersion: v1
 kind: Service

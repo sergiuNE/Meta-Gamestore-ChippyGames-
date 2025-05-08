@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deals-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deals-db
+  template:
+    metadata:
+      labels:
+        app: deals-db
+    spec:
+      containers:
+        - name: deals-db
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "root"
+            - name: MYSQL_DATABASE
+              value: "deals"
+          volumeMounts:
+            - name: deals-init-sql
+              mountPath: /docker-entrypoint-initdb.d/
+      volumes:
+        - name: deals-init-sql
+          configMap:
+            name: deals-init-sql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deals-db
+spec:
+  selector:
+    app: deals-db
+  ports:
+    - port: 3306
+      targetPort: 3306

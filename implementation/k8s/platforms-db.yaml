@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: platforms-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: platforms-db
+  template:
+    metadata:
+      labels:
+        app: platforms-db
+    spec:
+      containers:
+        - name: platforms-db
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "root"
+            - name: MYSQL_DATABASE
+              value: "platforms"
+          volumeMounts:
+            - name: platforms-init-sql
+              mountPath: /docker-entrypoint-initdb.d/
+      volumes:
+        - name: platforms-init-sql
+          configMap:
+            name: platforms-init-sql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: platforms-db
+spec:
+  selector:
+    app: platforms-db
+  ports:
+    - port: 3306
+      targetPort: 3306

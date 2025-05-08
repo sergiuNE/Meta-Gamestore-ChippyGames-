@@ -46,43 +46,6 @@ async function initPlatformDropdown() {
   });
 }
 
-/*async function fetchGames() {
-  const searchTerm = searchInput.value.trim();
-  const searchBar = document.querySelector(".search-bar") as HTMLDivElement;
-
-  if (!searchTerm) {
-    // Wis vorige resultaten als input leeg is
-    const oldCards = document.querySelectorAll(".game-card");
-    oldCards.forEach((el) => el.remove());
-
-    // Zet de zoekbalk terug naar het midden
-    searchBar.classList.remove("top-right");
-    return;
-  }
-
-  const platform = platformSelect.value;
-  const title = searchInput.value;
-
-  try {
-    const res = await fetch(
-      `${GAME_API_URL}?title=${encodeURIComponent(
-        title
-      )}&platform=${encodeURIComponent(platform)}`
-    );
-    const games = await res.json();
-
-    if (title.trim() !== "" && games.length > 0) {
-      searchBar.classList.add("top-right");
-    } else {
-      searchBar.classList.remove("top-right");
-    }
-
-    renderGames(games, platform);
-  } catch (err) {
-    console.error("Fout bij laden van games:", err);
-  }
-}*/
-
 async function fetchGames() {
   const searchTerm = searchInput.value.trim();
   const searchBar = document.querySelector(".search-bar") as HTMLDivElement;

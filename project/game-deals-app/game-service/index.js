@@ -8,7 +8,7 @@ const games = [
   {
     id: 1,
     title: "Elden Ring",
-    platforms: ["PC", "PlayStation 4", "PlayStation 5", "Xbox", "Nintendo"],
+    platforms: ["PC", "PlayStation 8", "PlayStation 5", "Xbox", "Nintendo"],
     genre: "Action",
     rating: 5,
     //price: "60.00€",

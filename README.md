@@ -1,6 +1,7 @@
 # GameHub Meta
 
 A smart meta-store for gamers to:
+
 - Compare game prices across digital & physical stores
 - Manage their game collection (manual & auto-sync with Steam, Epic, etc.)
 - Get price-drop alerts
@@ -33,11 +34,13 @@ A smart meta-store for gamers to:
 
 This project explores two architectural models:
 
-### 🔸 Monolithic Architecture (Design Only)
+### Monolithic Architecture (Design Only)
+
 - Proposed style: **Layered Monolith** or **Modular Monolith**
 - Use case: Simpler deployment, easier to debug, good for MVP
 
 ### 🔹 Microservices Architecture (With Kubernetes PoC)
+
 - Separate services for:
   - Game Catalog
   - Price Tracker
@@ -66,6 +69,7 @@ This project explores two architectural models:
 ## ICT Architecture Highlights
 
 - **Driving Characteristics** (see full report):
+
   - Scalability
   - Availability
   - Maintainability
@@ -83,11 +87,13 @@ This project explores two architectural models:
 
 > Each microservice is self-contained and exposes a REST API with dummy JSON.
 
-1. Clone the repo  
-2. Install `kubectl` and `minikube` or connect to your cluster  
+1. Clone the repo
+2. Install `kubectl` and `minikube` or connect to your cluster
 3. Apply deployment files:
    ```bash
    kubectl apply -f k8s/
+   ```
 
 ## Author
+
 Developed by Neagu Sergiu, student of ICT Architecture – AP Hogeschool
