@@ -14,4 +14,6 @@
 - Database latency
 - Memory/CPU usage per container
 
+Monitoring tools zoals Prometheus, Grafana en Alertmanager kunnen optioneel voor productie worden opgezet voor betere inzicht in metrics en alerting.
+
 ---

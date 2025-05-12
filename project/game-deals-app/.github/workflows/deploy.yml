@@ -1,0 +1,60 @@
+#deploy.yml -> Automatisch bouwen, pushen en deployen bij elke push
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      #Wachtwoord en username van DockerHub nodig voor: Om de Docker images te mogen pushen naar Docker Hub
+      - name: Log in to DockerHub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build and Push user-service image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/user-service:latest ./implementation/k8s/user-service
+          docker push ${{ secrets.DOCKER_USERNAME }}/user-service:latest
+
+      - name: Build and Push deal-service image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/deal-service:latest ./implementation/k8s/deal-service
+          docker push ${{ secrets.DOCKER_USERNAME }}/deal-service:latest
+
+      - name: Build and Push game-service image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/game-service:latest ./implementation/k8s/game-service
+          docker push ${{ secrets.DOCKER_USERNAME }}/game-service:latest
+
+      - name: Build and Push platform-service image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/platform-service:latest ./implementation/k8s/platform-service
+          docker push ${{ secrets.DOCKER_USERNAME }}/platform-service:latest
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: "v1.29.0" #ipv latest om verrassingen door updates te vermijden
+
+      - name: Set KUBECONFIG
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+
+      - name: Deploy to Kubernetes
+        run: |
+          set -e    
+          kubectl apply -f ./implementation/k8s/user-service.yaml
+          kubectl apply -f ./implementation/k8s/deal-service.yaml
+          kubectl apply -f ./implementation/k8s/game-service.yaml
+          kubectl apply -f ./implementation/k8s/platform-service.yaml

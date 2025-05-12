@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: deal-service
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: deal-service
@@ -12,6 +12,7 @@ spec:
       labels:
         app: deal-service
     spec:
+      restartPolicy: Always
       containers:
         - name: deal-service
           image: deal-service
@@ -27,6 +28,31 @@ spec:
               value: "root"
             - name: DB_NAME
               value: "deals"
+
+            # Nodig om automatische health checks te doen
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3004
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3004
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+            # Nodig voor autoscaling en stabiliteit
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+
 ---
 apiVersion: v1
 kind: Service

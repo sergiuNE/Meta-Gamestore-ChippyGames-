@@ -6,7 +6,7 @@ We willen continu kunnen deployen zonder manuele tussenkomst.
 
 ## Beslissing
 
-We implementeren een CI/CD pipeline met GitHub Actions of GitLab CI.
+We implementeren een CI/CD pipeline met GitHub Actions.
 
 ## Consequenties
 

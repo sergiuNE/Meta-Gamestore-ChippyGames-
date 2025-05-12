@@ -62,6 +62,7 @@ This project explores two architectural models:
 - `Kubernetes` (PoC deployment)
 - `Mermaid.js` (architecture diagrams)
 - `Markdown` (reporting)
+- `MySQL` (databases)
 - Optional: `Redis`, `MongoDB`, `PostgreSQL`, `Prometheus`, `Keycloak`
 
 ---

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: game-service
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: game-service
@@ -12,12 +12,37 @@ spec:
       labels:
         app: game-service
     spec:
+      restartPolicy: Always
       containers:
         - name: game-service
           image: game-service
           imagePullPolicy: Never
           ports:
             - containerPort: 3001
+
+          # Nodig om automatische health checks te doen
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+          # Nodig voor autoscaling en stabiliteit
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
 ---
 apiVersion: v1
 kind: Service
