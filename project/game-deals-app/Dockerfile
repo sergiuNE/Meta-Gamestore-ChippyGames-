@@ -5,7 +5,6 @@ WORKDIR /app
 # Kopieer package.json en package-lock.json (of yarn.lock)
 COPY package*.json ./
 
-# Installeer dependencies
 RUN npm install
 
 # Kopieer de rest van de code

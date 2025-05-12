@@ -2,7 +2,7 @@
 
 ## Overzicht
 
-Deze applicatie bestaat uit meerdere microservices, elk met hun eigen Docker-image, Kubernetes Deployment en Service. De frontend draait los via Docker Compose (Vite).
+Deze applicatie bestaat uit meerdere microservices, elk met hun eigen Docker-image, Kubernetes Deployment en Service. Voor de Frontend heb ik Vite gebruikt en die draait mee in Docker.
 
 Elke service is afzonderlijk gecontaineriseerd en gedeployed in Kubernetes. De toegang verloopt via `kubectl port-forward` of een Ingress-configuratie met `kubectl port-forward -n ingress-nginx service/ingress-nginx-controller 8080:80`.
 
