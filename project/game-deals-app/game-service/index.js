@@ -13,7 +13,7 @@ const games = [
     rating: 5,
     //price: "60.00€",
     //sale: "20%",
-    saleFrom: "Amazon",
+    saleFrom: "Steam",
   },
   {
     id: 2,

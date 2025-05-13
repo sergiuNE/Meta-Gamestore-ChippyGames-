@@ -132,3 +132,21 @@ function renderGames(games: any[], platform: string) {
 }
 
 window.addEventListener("DOMContentLoaded", initPlatformDropdown);
+
+// Function to handle login button click
+function setupLoginButton() {
+  const loginButton = document.querySelector('.login-button');
+  if (loginButton) {
+    loginButton.addEventListener('click', () => {
+      window.location.href = '/login.html';
+    });
+  }
+}
+
+// Call the function when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  setupLoginButton();
+});
+
+// Export the function so it can be used elsewhere if needed
+export { setupLoginButton };

@@ -187,3 +187,127 @@ footer a {
 .rate-button:hover {
   background-color: #666;
 }
+
+/* Login form styles */
+.login-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 0;
+  margin-top: -50px;
+}
+
+.login-form-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.login-form {
+  background-color: #084d81;
+  border-radius: 8px;
+  padding: 30px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.camera-icon {
+  background-color: #00a8ff;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.camera-icon img {
+  width: 30px;
+  height: 30px;
+}
+
+.form-group {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.login-input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  background-color: transparent;
+  color: white;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.login-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 15px 0;
+  font-size: 14px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+}
+
+.forgot-password {
+  color: white;
+  text-decoration: none;
+}
+
+.login-submit-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #00a8ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 15px 0;
+  text-transform: uppercase;
+}
+
+.register-option {
+  margin-top: 15px;
+  font-size: 14px;
+  color: white;
+}
+
+.register-option a {
+  color: white;
+  text-decoration: none;
+}
+
+.login-button {
+  background: white;
+  color: black;
+  padding: 1rem 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.login-button:hover {
+  background-color: #f0f0f0;
+}
+
+.login-button:active {
+  background-color: #e0e0e0;
+}
