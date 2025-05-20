@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const PORT = 3001;
 const cors = require("cors");
+const axios = require("axios");
+
 app.use(cors());
 
 const games = [
@@ -40,6 +42,52 @@ app.get("/games", (req, res) => {
   res.json(filteredGames);
 });
 
-app.listen(PORT, () => {
+const DEAL_SERVICE_URL =
+  process.env.DEAL_SERVICE_URL || "http://deal-service:80";
+
+async function getDealsForGame(gameId) {
+  try {
+    const url = `${DEAL_SERVICE_URL}/deals?gameId=${gameId}`;
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching deals for game ${gameId}:`, error.message);
+    return [];
+  }
+}
+
+// Games with deals endpoint
+app.get("/games-with-deals", async (req, res) => {
+  try {
+    // Clone the games array
+    const gamesWithDeals = JSON.parse(JSON.stringify(games));
+
+    // Add deals to each game
+    for (let game of gamesWithDeals) {
+      const deals = await getDealsForGame(game.id);
+      game.deals = deals;
+    }
+
+    res.json(gamesWithDeals);
+  } catch (error) {
+    console.error("Error fetching games with deals:", error);
+    res.status(500).json({
+      error: "Failed to fetch games with deals",
+      message: error.message,
+    });
+  }
+});
+
+// Health
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
+//Root
+app.get("/", (req, res) => {
+  res.send("Game Service is running!");
+});
+
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Game service running on port ${PORT}`);
 });

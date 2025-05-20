@@ -1,8 +1,10 @@
+#StatefulSet
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: platforms-db
 spec:
+  serviceName: "platforms-db"
   replicas: 1
   selector:
     matchLabels:
@@ -24,12 +26,23 @@ spec:
               value: "platforms"
           volumeMounts:
             - name: platforms-init-sql
-              mountPath: /docker-entrypoint-initdb.d/
+              mountPath: /docker-entrypoint-initdb.d
+            - name: platforms-data
+              mountPath: /var/lib/mysql
       volumes:
         - name: platforms-init-sql
           configMap:
             name: platforms-init-sql
+  volumeClaimTemplates:
+    - metadata:
+        name: platforms-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
 ---
+#Service
 apiVersion: v1
 kind: Service
 metadata:

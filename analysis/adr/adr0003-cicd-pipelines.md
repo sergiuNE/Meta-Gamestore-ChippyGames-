@@ -1,15 +1,17 @@
-# ADR-0003: CI/CD Pipelines
+# ADR-0003: CI/CD Pipelines (Continuous Integration/Deployment)
+
+## Status: Accepted
 
 ## Context
 
-We willen continu kunnen deployen zonder manuele tussenkomst.
+We willen dat nieuwe versies van onze software automatisch gebouwd en gepubliceerd worden.
 
 ## Beslissing
 
-We implementeren een CI/CD pipeline met GitHub Actions. Het bestand `deploy.yml` heeft de inhoud van hoe we CI/CD deployen naar DockerHub.
-Het doel was om ook automatisch naar Kubernetes te deployen. Dit bleek echter niet mogelijk via een lokaal cluster (`kubernetes.docker.internal`) binnen GitHub Actions, omdat deze omgeving geen toegang heeft tot lokale netwerken.
+We bouwen een CI/CD pipeline met GitHub Actions. Het bestand `deploy.yml` heeft de inhoud van hoe we CI/CD deployen naar Docker Hub. Bij elke push naar **main** worden de applicaties gebouwd en geüpload naar Docker Hub.
+We plannen om later ook automatisch te deployen naar Kubernetes, maar dat lukt nu niet met een lokaal cluster. (`kubernetes.docker.internal`)
 
-Een oplossing hiervoor is het gebruik van een **extern Kubernetes-cluster**, zoals Google Kubernetes Engine (GKE). Aangezien deze clusters een betalende setup vereisen of buiten scope vallen, hebben we besloten om **de CI/CD pipeline op te zetten tot en met Docker Hub**, en de Kubernetes-deploy stap te behouden als documentatie van intentie.
+Een oplossing hiervoor is het gebruik van een **extern Kubernetes-cluster**, zoals Google Kubernetes Engine (GKE). Deze cluster vereist een betalende setup, daaron hebben we besloten om **de CI/CD pipeline op te zetten tot en met Docker Hub**, en de Kubernetes-deploy stap te behouden als documentatie.
 
 ## Consequenties
 

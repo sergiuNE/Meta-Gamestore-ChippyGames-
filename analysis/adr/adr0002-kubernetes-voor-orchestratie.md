@@ -1,14 +1,18 @@
 # ADR-0002: Kubernetes voor Orchestratie
 
+## Status: Accepted
+
 ## Context
 
-We willen de microservices automatisch kunnen schalen, herstarten bij falen en configureren via declaratieve bestanden.
+We willen onze microservices automatisch kunnen beheren: opstarten, schalen, opnieuw opstarten bij fouten en makkelijk configureren.
 
 ## Beslissing
 
-Gebruik van Kubernetes als container orchestrator.
+We gebruiken Kubernetes als orchestratieplatform.
 
 ## Consequenties
 
-- Meer complexiteit in ops.
-- Betere betrouwbaarheid en schaalbaarheid.
+- Kubernetes zorgt voor hoge beschikbaarheid en automatische updates.
+- We kunnen declaratieve configuraties gebruiken via YAML-bestanden.
+- De infrastructuur wordt technischer en vereist meer kennis om goed te beheren.
+- Kubernetes werkt goed samen met CI/CD pipelines.

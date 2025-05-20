@@ -1,20 +1,23 @@
-# Context Diagram (C4 Level 1)
+# Context Diagram
 
-Ons systeem is een platform dat games en deals aggregeert uit externe winkels en gepersonaliseerde collecties en aanbevelingen biedt aan gebruikers.
+Dit is een overzicht van de interactie tussen ons platform en de externe gebruikers of systemen.
 
-## Externe Actoren:
+## Externe Gebruikers
 
-- Bezoeker
-- Ingelogde gebruiker
-- Curator
-- Admin
-- Externe winkels (Steam, Amazon, Epic Games, etc.)
+- **Bezoeker**: kan door games bladeren en kortingen zien, maar is niet ingelogd.
+- **Ingelogde gebruiker**: kan collecties maken, games volgen en gepersonaliseerde aanbiedingen bekijken.
+- **Curator**: kan content beheren, zoals aanbevelingen of media.
+- **Admin**: beheert gebruikers en systeeminstellingen.
 
-## Systeem:
+## Externe Systemen
 
-- GameDeal Aggregator Platform
+- **Winkels zoals Steam, Amazon en Epic Games**: leveren gameprijzen, details en promoties via hun API’s.
 
-## Interfaces:
+## Ons Platform
 
-- REST API
-- Web Interface
+- **ChippyGames-platform**: het centrale systeem dat alle data verzamelt, verwerkt en toont aan gebruikers.
+
+## Interfaces
+
+- **REST API**: zorgt voor communicatie tussen frontend en backend.
+- **Webinterface**: de website die gebruikers zien en gebruiken.

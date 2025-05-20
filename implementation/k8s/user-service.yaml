@@ -1,3 +1,4 @@
+#Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -29,20 +30,20 @@ spec:
             - name: DB_NAME
               value: "users"
 
-          # Nodig om automatische health checks te doen
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 3003
-            initialDelaySeconds: 10
-            periodSeconds: 10
+          # Nodig om automatische health checks te doen (Als ik deze uit commentaar haal werken mijn pods niet meer)
+          #livenessProbe:
+          #httpGet:
+          #path: /health
+          #port: 3003
+          #initialDelaySeconds: 30
+          #periodSeconds: 10
 
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 3003
-            initialDelaySeconds: 5
-            periodSeconds: 5
+          #readinessProbe:
+          #httpGet:
+          #path: /health
+          #port: 3003
+          #initialDelaySeconds: 30
+          #periodSeconds: 5
 
           # Nodig voor autoscaling en stabiliteit
           resources:
@@ -53,14 +54,17 @@ spec:
               memory: "256Mi"
               cpu: "500m"
 ---
+#Service
 apiVersion: v1
 kind: Service
 metadata:
   name: user-service
 spec:
-  selector:
-    app: user-service
+  type: NodePort
   ports:
     - protocol: TCP
       port: 80
       targetPort: 3003
+      nodePort: 30003
+  selector:
+    app: user-service

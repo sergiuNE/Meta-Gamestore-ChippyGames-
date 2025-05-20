@@ -1,55 +1,75 @@
 # Logische componenten
 
-We combineren de _actor/action_ en _workflow approach_:
+We combineren twee manieren om het systeem te begrijpen:
 
-## Actors:
+- Actor/actie: wie doet wat?
+- Workflow: hoe verlopen de stappen achter de schermen?
+
+## Actoren:
 
 - Bezoeker (Niet ingelogd)
-- Ingelogde gebruiker
-- Curator
-- Winkel API’s (Amazon, Steam, etc.)
-- Admin
+- Gebruiker: ingelogd, met een persoonlijke collectie
+- Curator: keurt content goed, voorkomt dubbele of slechte games
+- Winkel-API's: zoals Steam, Amazon, PlayStation Store…
+- Admin: beheert het platform
 
 ## Componenten:
 
-- Auth & User Management
-- Game Catalogus
-- Deals Aggregator
-- Store Connectors (scrapers / API clients)
-- Curatie Module
-- Collection Manager
-- Aanbevelingensysteem
-- Notificatie Service
-- Analytics (Affiliate + Cost Recovery)
-- Admin dashboard
+- User Service: regelt login, registratie, profiel en authenticatie
+- Game Service: beheert games, beschrijvingen, afbeeldingen en ratings
+- Deals Service: verzamelt prijzen uit winkels
+- Platform Service: beheert platforms (PC, PS5, Switch...)
+- Store Connectors: haalt automatisch data op uit winkels via API's of scraping
+- Curatie Module: laat curators content goedkeuren of samenvoegen
+- Collectiebeheer: gebruikers beheren hun eigen games
+- Aanbevelingssysteem: stelt nieuwe games voor op basis van jouw collectie en ratings
+- Notificatieservice: laat je weten wanneer een game een promotie heeft
+- Analytics & Affiliates: houdt inkomsten en kosten bij, toont hoeveel er is opgehaald
+- Admin Dashboard: beheert het systeem
 
 ## Workflow (voorbeeld):
 
-1. User logt in → personalisatie geladen
-2. User bekijkt game → catalogus + deal data samengevoegd
-3. User voegt toe aan collectie → aanbevelingen aangepast
-4. Notificatie-service monitort prijzen
+1. Inloggen
+   -> Je logt in, je voorkeuren worden geladen
+
+2. Games bekijken
+   -> Je bezoekt een gamepagina
+   -> De app toont info uit de catalogus én de beste deals van het moment
+
+3. Game toevoegen aan collectie
+   -> De game wordt toegevoegd
+   -> Het aanbevelingssysteem wordt bijgewerkt
+
+4. Prijs volgen
+   -> De notificatieservice houdt de prijs in de gaten
+   -> Je krijgt een melding als de prijs onder je drempel komt
+
+5. Games uploaden
+   -> Je voegt zelf een game toe
+   -> De curator keurt ze goed
 
 ## Diagram
 
 ```mermaid
 graph TD
-    UI[User Interface]
-    Auth[Auth & User Management]
-    Catalog[Game Catalogus]
-    Deals[Deals Aggregator]
+    UI[Gebruikersinterface]
+    User[User Service]
+    Games[Game Service]
+    Deals[Deals Service]
+    Platform[Platform Service]
     Connectors[Store Connectors]
     Curatie[Curatie Module]
-    Collectie[Collection Manager]
-    Aanbevelingen[Aanbevelingensysteem]
-    Notificatie[Notificatie Service]
-    Analytics[Analytics]
+    Collectie[Collectiebeheer]
+    Aanbevelingen[Aanbevelingssysteem]
+    Notificatie[Notificatieservice]
+    Analytics[Analytics & Affiliates]
     Admin[Admin Dashboard]
-    DB[(Database)]
+    DB[(Databases)]
 
-    UI --> Auth
-    UI --> Catalog
-    UI --> Deals
+    UI --> UserService
+    UI --> GameService
+    UI --> DealService
+    UI --> PlatformService
     UI --> Curatie
     UI --> Collectie
     UI --> Aanbevelingen
@@ -57,11 +77,53 @@ graph TD
     UI --> Analytics
     UI --> Admin
 
-    Deals --> Connectors
-    Catalog --> Connectors
-    Auth --> DB
-    Catalog --> DB
-    Deals --> DB
+    DealService --> Connectors
+    GameService --> Connectors
+    UserService --> Connectors
+    PlatformService --> Connectors
+    DealService --> DB
+    UserService --> DB
+    PlatformService --> DB
+    Curatie --> DB
+    Collectie --> DB
+    Aanbevelingen --> DB
+    Notificatie --> DB
+    Analytics --> DB
+    Admin --> DB
+```
+
+## Diagram met Actoren
+
+```mermaid
+graph TD
+    Bezoeker[Bezoeker]
+    Gebruiker[Ingelogde Gebruiker]
+    Curator[Curator]
+    Admin[Admin]
+
+    Bezoeker --> UI
+    Gebruiker --> UI
+    Curator --> UI
+    Admin --> Admin
+
+    UI --> UserService
+    UI --> GameService
+    UI --> DealService
+    UI --> PlatformService
+    UI --> Curatie
+    UI --> Collectie
+    UI --> Aanbevelingen
+    UI --> Notificatie
+    UI --> Analytics
+    UI --> Admin
+
+    DealService --> Connectors
+    GameService --> Connectors
+    UserService --> Connectors
+    PlatformService --> Connectors
+    DealService --> DB
+    UserService --> DB
+    PlatformService --> DB
     Curatie --> DB
     Collectie --> DB
     Aanbevelingen --> DB

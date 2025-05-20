@@ -1,3 +1,4 @@
+#Ingress
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -9,31 +10,40 @@ metadata:
     nginx.ingress.kubernetes.io/cors-allow-origin: "*"
 spec:
   rules:
-    - host: chippygames.com #localhost als je op localhost wilt testen
+    - host: game.chippygames.com
       http:
         paths:
-          - path: /deals
-            pathType: Prefix
-            backend:
-              service:
-                name: deal-service
-                port:
-                  number: 80
-          - path: /games
+          - path: /
             pathType: Prefix
             backend:
               service:
                 name: game-service
                 port:
                   number: 80
-          - path: /platforms
+    - host: deal.chippygames.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: deal-service
+                port:
+                  number: 80
+    - host: platform.chippygames.com
+      http:
+        paths:
+          - path: /
             pathType: Prefix
             backend:
               service:
                 name: platform-service
                 port:
                   number: 80
-          - path: /users
+    - host: user.chippygames.com
+      http:
+        paths:
+          - path: /
             pathType: Prefix
             backend:
               service:

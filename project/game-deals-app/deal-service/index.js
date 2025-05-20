@@ -8,10 +8,6 @@ const PORT = 3004;
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Deal Service is running!");
-});
-
 async function retryQuery(queryFn, retries = 3, delay = 500) {
   for (let i = 0; i < retries; i++) {
     try {
@@ -26,7 +22,17 @@ async function retryQuery(queryFn, retries = 3, delay = 500) {
 
 app.get("/deals", async (req, res) => {
   try {
-    const [rows] = await retryQuery(() => pool.query("SELECT * FROM deals"));
+    const gameId = req.query.gameId;
+
+    let query = "SELECT * FROM deals";
+    let values = [];
+
+    if (gameId) {
+      query += " WHERE gameId = ?";
+      values.push(gameId);
+    }
+
+    const [rows] = await retryQuery(() => pool.query(query, values));
 
     res.json(rows);
   } catch (err) {
@@ -35,6 +41,33 @@ app.get("/deals", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+app.get("/deals/:id", async (req, res) => {
+  const dealId = parseInt(req.params.id);
+  try {
+    const [rows] = await pool.query("SELECT * FROM deals WHERE id = ?", [
+      dealId,
+    ]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Deal not found" });
+    }
+
+    res.json(rows[0]);
+  } catch (err) {
+    console.error("Fout bij ophalen van deal:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Health
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
+app.get("/", (req, res) => {
+  res.send("Deal Service is running!");
+});
+
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Deal service running on port ${PORT}`);
 });

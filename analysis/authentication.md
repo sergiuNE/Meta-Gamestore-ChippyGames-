@@ -1,20 +1,22 @@
+# Dit document hoort bij de implementatiefase
+
 # Authenticatie Overzicht
 
 ## Werking:
 
-- Gebruiker logt in met e-mail en wachtwoord
-- Na succesvolle login wordt een **JWT token** teruggestuurd
-- Bij elke API-aanvraag stuurt de gebruiker het token mee
+- Een gebruiker logt in met e-mail en wachtwoord.
+- Na een geslaagde login krijgt de gebruiker een **JWT-token (JSON Web Token)** (een soort digitale sleutel).
+- Bij elke aanvraag naar de API wordt dat token meegestuurd in de headers.
 
-## Rollen:
+## Rollen in het systeem
 
-- **Gebruiker**: basis toegang
-- **Curator**: extra rechten voor het cureren van content
-- **Admin**: beheer van platform en gebruikers
+- **Gebruiker**: kan zoeken, collecties maken, deals bekijken...
+- **Curator**: kan extra content beheren, zoals media of aanbevelingen.
+- **Admin**: heeft toegang tot beheerfuncties en gebruikersbeheer.
 
-## Security Best Practices:
+## Beveiliging
 
-- Tokens expireren na 1 uur
-- Refresh tokens worden opgeslagen in veilige HTTP-only cookies
+- Tokens verlopen na 1 uur, zodat ze niet te lang bruikbaar blijven.
+- Refresh tokens worden veilig opgeslagen in cookies die niet toegankelijk zijn voor JavaScript (HTTP-only).
 
 ---

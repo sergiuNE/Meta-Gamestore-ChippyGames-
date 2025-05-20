@@ -1,14 +1,16 @@
 # ADR-0004: Start met Monolithische Architectuur
 
+## Status: Accepted
+
 ## Context
 
-Om sneller een MVP op te leveren, starten we met een monoliet.
+Een monolithische applicatie is eenvoudiger te bouwen en debuggen in de beginfase. Daarom beginnen we in onze analyse met het ontwerp van één applicatie waarin alle onderdelen samen draaien.
 
 ## Beslissing
 
-We bouwen een eerste versie in een monolithische layered architecture.
+Voor het analyseren en begrijpen van de logische structuur starten we met een monolithische layered architecture. In onze implementatie splitsen we de onderdelen wel meteen op in afzonderlijke services.
 
 ## Consequenties
 
-- Snellere oplevering.
-- Minder schaalbaar initieel, maar makkelijker te ontwikkelen.
+- De logica is initieel eenvoudiger te ontwerpen als één geheel.
+- Voor de implementatie schakelen we snel over naar microservices voor betere schaalbaarheid.

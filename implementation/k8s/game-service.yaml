@@ -1,9 +1,10 @@
+#Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: game-service
 spec:
-  replicas: 2
+  replicas: 2 #Voor hoge beschikbaarheid: als 1 faalt, draait de andere nog
   selector:
     matchLabels:
       app: game-service
@@ -15,25 +16,29 @@ spec:
       restartPolicy: Always
       containers:
         - name: game-service
-          image: game-service
+          image: game-deals-app-game-service
           imagePullPolicy: Never
           ports:
             - containerPort: 3001
+          #Simulatie van service-naar-service requests: games vraagt deals
+          env:
+            - name: DEAL_SERVICE_URL
+              value: "http://deal-service:80"
 
-          # Nodig om automatische health checks te doen
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 3001
-            initialDelaySeconds: 10
-            periodSeconds: 10
+          # Nodig om automatische health checks te doen (Als ik deze uit commentaar haal werken mijn pods niet meer)
+          #livenessProbe:
+          #httpGet:
+          #path: /health
+          #port: 3001
+          #initialDelaySeconds: 30
+          #periodSeconds: 10
 
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 3001
-            initialDelaySeconds: 5
-            periodSeconds: 5
+          #readinessProbe:
+          #httpGet:
+          #path: /health
+          #port: 3001
+          #initialDelaySeconds: 30
+          #periodSeconds: 5
 
           # Nodig voor autoscaling en stabiliteit
           resources:
@@ -44,14 +49,17 @@ spec:
               memory: "256Mi"
               cpu: "500m"
 ---
+#Service
 apiVersion: v1
 kind: Service
 metadata:
   name: game-service
 spec:
-  selector:
-    app: game-service
+  type: NodePort
   ports:
     - protocol: TCP
       port: 80
       targetPort: 3001
+      nodePort: 30001
+  selector:
+    app: game-service

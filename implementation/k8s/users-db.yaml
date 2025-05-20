@@ -1,8 +1,10 @@
+#Statefulset
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: users-db
 spec:
+  serviceName: "users-db"
   replicas: 1
   selector:
     matchLabels:
@@ -24,12 +26,23 @@ spec:
               value: "users"
           volumeMounts:
             - name: users-init-sql
-              mountPath: /docker-entrypoint-initdb.d/
+              mountPath: /docker-entrypoint-initdb.d
+            - name: users-data
+              mountPath: /var/lib/mysql
       volumes:
         - name: users-init-sql
           configMap:
             name: users-init-sql
+  volumeClaimTemplates:
+    - metadata:
+        name: users-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
 ---
+#Service
 apiVersion: v1
 kind: Service
 metadata:

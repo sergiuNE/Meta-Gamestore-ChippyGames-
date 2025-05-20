@@ -1,13 +1,20 @@
+# Dit document hoort bij de implementatiefase
+
 # Resilience Mechanismen
+
+Ons systeem moet blijven werken, ook als externe winkels (zoals Steam of Amazon) tijdelijk offline zijn. Daarom gebruiken we deze technieken:
 
 ## Circuit Breakers
 
-Bij falen van een externe store API, opent de circuit breaker om verdere fouten te voorkomen.
+Als een externe API te vaak faalt, schakelt het systeem tijdelijk over op een ‘open’ status. Dan worden nieuwe verzoeken niet meer verstuurd naar de falende bron, om verdere problemen te voorkomen.
 
 ## Retries
 
-Timeouts en retries worden gebruikt bij tijdelijke netwerkproblemen.
+Als een verzoek tijdelijk mislukt (bijv. door een netwerkfout), probeert het systeem het automatisch nog een paar keer opnieuw.
 
 ## Fallback
 
-Bij blijvende errors tonen we cached prijzen of meldingen dat data tijdelijk niet beschikbaar is.
+Als iets blijft mislukken, tonen we een tijdelijke vervanging. Bijvoorbeeld:
+
+- Oude (gecachete) prijzen
+- Een melding dat data tijdelijk niet beschikbaar is

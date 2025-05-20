@@ -2,25 +2,26 @@
 
 ## Fase 1: Monolithische Architectuur
 
-We starten met een **Layered Monolithic Architecture**, bestaande uit:
+We beginnen met een **laag-voor-laag (layered) monolithische architectuur**, die bestaat uit:
 
-- **Presentation Layer**: UI en routing
-- **Application Layer**: Business logica
-- **Data Layer**: Repositories en database access
+- **Presentatielaag**: webinterface en mobiele clients.
+- **Business Logic Layer**: bevat regels voor collecties, aanbevelingen, prijslogica...
+- **Integration Layer**: communicatie met externe APIs (Steam, Epic...), authenticatie...
+- **Persistence Layer**: toegang tot relationele databases (MySQL) met games, deals, users...
 
-### Reden
+### Waarom?
 
-- Snelle prototyping
-- Minder infrastructuuroverhead in de beginfase
-- Eenvoudig te debuggen en te deployen
+- Snelle opstart en eerste versie bouwen.
+- Minder infrastructuur nodig in het begin.
+- Eenvoudiger te testen en fouten op te lossen.
 
-Deze stijl maakt migratie naar microservices later eenvoudiger omdat de modules nu al logisch gescheiden zijn.
+Deze structuur maakt het later makkelijker om over te stappen naar microservices, omdat de onderdelen nu al logisch gescheiden zijn.
 
 ---
 
-## Mapping van Logische naar Fysieke Architectuur
+## Van Logische naar Fysieke Architectuur
 
-### Monolithisch
+### Monolithisch Model (Layered Architecture)
 
 ```mermaid
 flowchart TD
@@ -34,13 +35,13 @@ flowchart TD
 
 ### Mapping Uitleg
 
-In het monolithische model worden alle lagen binnen één Node.js-applicatie beheerd. De presentatie, logica en data-access zitten in één codebase, die draait op een enkele server (of container). De database is een afzonderlijke component, maar rechtstreeks gekoppeld.
+In het begin zitten alle onderdelen (UI, logica en data) samen in één Node.js-applicatie. Alles draait in één codebase, op één server of container. Alleen de database is apart.
 
-In het microservicesmodel zijn de logische componenten uitgesplitst per concern: authenticatie, gebruikers, games, prijzen, etc. Elke service heeft zijn eigen verantwoordelijkheid. De fysieke mapping gebeurt door Kubernetes Pods en Deployments, die elk overeenkomen met één logische component.
+In de microservices-versie splitsen we elk onderdeel op in een aparte service (bijv. gebruikers, games, deals...). Elk draait in zijn eigen ‘Pod’ in Kubernetes. Een Pod is een soort ‘doos’ waarin een applicatie draait binnen Kubernetes.
 
 ## Microservices Architectuur
 
-Onderstaande weergave toont de microservices-architectuur inclusief de API Gateway, backendservices en externe integraties.
+Onderstaande tekening toont de microservices-architectuur. Deze bestaat uit een API Gateway, aparte backendservices en koppelingen met externe diensten (zoals game stores).
 
 ```mermaid
 flowchart TD
@@ -50,65 +51,55 @@ flowchart TD
 
     subgraph Kubernetes Cluster
         Ingress[Ingress Controller]
-        Gateway[API Gateway Pod]
-        Auth[Auth Service Pod]
-        User[User Service Pod]
-        Game[Game Service Pod]
-        Price[Price Tracker Pod]
-        Reco[Recommendation Pod]
-        Notify[Notification Pod]
-        Collection[Collection Pod]
-        Media[Media Pod]
-        Curator[Curator Pod]
-        StoreAPI[Store Integrations Pod]
-        DB[(MySQL Pod)]
+       subgraph Services
+            Game[Game Service]
+            Deal[Deal Service]
+            Platform[Platform Service]
+            User[User Service]
+        end
+
+        subgraph Databases
+            GamesDB[(games-db - MySQL)]
+            DealsDB[(deals-db - MySQL)]
+            PlatformsDB[(platforms-db - MySQL)]
+            UsersDB[(users-db - MySQL)]
+        end
     end
 
+    %% Ingress routing
     Client --> Ingress
-    Ingress --> Gateway
+    Ingress --> Game
+    Ingress --> Deal
+    Ingress --> Platform
+    Ingress --> User
 
-    Gateway --> Auth
-    Gateway --> User
-    Gateway --> Game
-    Gateway --> Price
-    Gateway --> Reco
-    Gateway --> Notify
-    Gateway --> Collection
-    Gateway --> Media
-    Gateway --> Curator
-
-    Game --> StoreAPI
-    Price --> StoreAPI
-
-    Auth --> DB
-    User --> DB
-    Game --> DB
-    Price --> DB
-    Reco --> DB
-    Notify --> DB
-    Collection --> DB
-    Media --> DB
-    Curator --> DB
+    %% Service to DB connections
+    Game --> GamesDB
+    Deal --> DealsDB
+    Platform --> PlatformsDB
+    User --> UsersDB
 ```
 
 ## Fysieke Architectuur (Microservices)
 
-In de fysieke architectuur van de microservices draaien alle services in aparte Docker-containers binnen een Kubernetes-cluster. Elke microservice is gedeployed als een eigen Deployment in Kubernetes, met bijhorende Service, en indien nodig ConfigMaps of Secrets.
+In dit model draait elke service in een aparte Docker-container binnen een Kubernetes-cluster.
 
-Alle communicatie van buitenaf verloopt via een Ingress Controller, bijvoorbeeld ingress-nginx. Deze maakt het mogelijk om de applicatie te benaderen via een domein zoals chippygames.com.
+Elke microservice wordt apart gedeployed (uitgerold) met een eigen configuratie en communicatiekanaal. We gebruiken een Ingress Controller om verkeer van buitenaf (bijv. chippygames.com) naar de juiste service te sturen.
 
-Elke service draait in zijn eigen Pod, wat zorgt voor isolation en resilience.
+De database draait ook als een aparte container (Pod) in het cluster.
 
-Er wordt een gedeelde MySQL-database gebruikt, die eveneens als een Pod draait binnen de cluster.
+De CI/CD pipeline met GitHub Actions zorgt ervoor dat bij elke wijziging automatisch een nieuwe versie wordt gebouwd, geüpload naar Docker Hub, en (later configureren) gedeployed naar Kubernetes.
 
-GitHub Actions verzorgt de CI/CD: bij elke push naar main wordt automatisch een Docker-image gebouwd, gepusht naar DockerHub en uitgerold naar de Kubernetes-cluster met kubectl apply.
+## Waarom dit werkt
 
-Deze aanpak laat een hoge mate van schaalbaarheid en fouttolerantie toe. Door gebruik te maken van health checks en resource limits in de Kubernetes-configuraties worden problemen vroeg opgevangen.
+- Elke service kan apart worden aangepast of herstart zonder dat het hele systeem stopt.
+- Kubernetes controleert automatisch of alles nog werkt (met health checks).
+- Het systeem is beter bestand tegen fouten en groeit makkelijk mee.
 
 ## Monitoring, Authenticatie en Resilience
 
-Monitoring gebeurt met endpoints zoals /health en readiness/liveness probes die in Kubernetes gedefinieerd zijn.
+Monitoring gebeurt via endpoints zoals /health, die worden gecontroleerd door Kubernetes.
 
-Authenticatie is voorzien via een aparte auth-service met token-based access (JWT of vergelijkbaar).
+Authenticatie wordt geregeld met een aparte auth-service en tokens (zoals JWT).
 
 Resilience wordt bereikt door gebruik te maken van Kubernetes’ self-healing (restart on failure) en door fallback-mechanismen (bijvoorbeeld bij het falen van externe API-integraties).

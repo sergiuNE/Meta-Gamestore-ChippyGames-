@@ -1,39 +1,49 @@
-# Karakteristieken van het systeem
+# Karakteristieken van het Systeem
 
-## Algemene Karakteristieken
+## Algemene Eigenschappen
 
-### 1. Performantie
+### 1. Snelheid (Performance)
 
-Aangezien de data (kortingen, prijzen, aanbevelingen) van veel externe winkels komt en real-time updates vereist zijn, moet het systeem vlot reageren. Performantie is cruciaal voor een goede gebruikerservaring.
+Omdat prijzen en kortingen vaak veranderen en we gegevens ophalen van externe winkels, moet het systeem snel kunnen reageren.
 
-### 2. Beschikbaarheid
+### 2. Beschikbaarheid (Availability)
 
-Omdat we afhankelijk zijn van externe winkels (Steam, Amazon, GOG...) en gebruikers notificaties verwachten, moet ons systeem **hoog beschikbaar** zijn. Fallbacks bij offline stores zijn noodzakelijk.
+Gebruikers verwachten dat het systeem altijd werkt. Als een winkel tijdelijk offline is (bijv. Steam of Amazon), moet ons systeem blijven draaien en eventueel tijdelijke oplossingen gebruiken.
 
-### 3. Schaalbaarheid
+### 3. Schaalbaarheid (Scalability)
 
-Het platform moet kunnen meegroeien naarmate er meer gebruikers, winkels of platforms bijkomen.
+Wanneer het aantal gebruikers, winkels of games groeit, moet het systeem mee kunnen groeien zonder traag of instabiel te worden.
 
-### 4. Onderhoudbaarheid
+### 4. Onderhoudbaarheid (Maintainability)
 
-Componenten moeten afzonderlijk kunnen worden aangepast of vervangen zonder het volledige systeem te verstoren.
+Elke service moet apart aangepast kunnen worden zonder dat andere onderdelen kapot gaan. Dit maakt het eenvoudiger om fouten op te lossen of nieuwe functies toe te voegen.
 
-### 5. Beveiliging
+### 5. Beveiliging (Security)
 
-Gebruikersdata (inloggegevens, collecties, aanbevelingen) moeten veilig worden opgeslagen en uitgewisseld.
+Gebruikersgegevens zoals wachtwoorden, collecties en voorkeuren moeten veilig worden opgeslagen en verstuurd.
 
 ---
 
 # Driving Characteristics (belangrijkste 3)
 
-## 1. **Realtime updaten van gegevens** (Performantie)
+## 1. **Live bijwerken van gegevens**
 
-→ Deals kunnen snel verlopen, dus onze meta-winkel moet zo goed als live kunnen updaten. Daarom is performantie en caching een cruciale prioriteit.
+## Categorie: Performance
 
-## 2. **Resilience bij externe afhankelijkheden**
+→ Kortingen kunnen snel veranderen. Daarom moet ons systeem bijna live updates kunnen doen, met hulp van snelle opslag (caching) van eerder opgehaalde data en optimalisaties.
 
-→ Als Amazon of de PlayStation Store tijdelijk offline is, mag onze applicatie niet crashen. Dus **resilience** (circuit breakers, retries, fallback) wordt een sleutelkarakteristiek.
+## 2. **Blijft werken bij externe storingen**
+
+## Categorie: Resilience (valt onder Availability en Reliability)
+
+→ Als een externe winkel offline is, mag onze app niet stoppen. We gebruiken technieken zoals:
+
+- Retries (opnieuw proberen)
+- Fallbacks (tijdelijke vervanging)
+- Circuit breakers (automatisch stoppen bij herhaalde fouten)
 
 ## 3. **Personalisatie & Aanbevelingen**
 
-→ Gebruikers moeten relevante aanbevelingen krijgen op basis van hun collectie. Dit vraagt **goede data-integratie** en **gebruikerscontext**.
+## Categorie: User Experience / Intelligence / Performance
+
+→ Gebruikers moeten relevante deals en games zien op basis van hun voorkeuren. Daarvoor gebruiken we gebruikersdata en slimme algoritmes.

@@ -32,6 +32,15 @@ app.get("/platforms", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+// Health
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
+app.get("/", (req, res) => {
+  res.send("Platform Service is running!");
+});
+
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Platform service draait op poort ${PORT}`);
 });
