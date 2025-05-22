@@ -7,7 +7,7 @@ CREATE TABLE deals (
   title VARCHAR(255) NOT NULL,
   deal VARCHAR(50) NOT NULL,
   price DECIMAL(10,2) NOT NULL,
-  gameId int not null
+  gameId INT NOT NULL
 );
 
 INSERT INTO deals (title, deal, price, gameId) VALUES 

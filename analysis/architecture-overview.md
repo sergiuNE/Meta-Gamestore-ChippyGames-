@@ -80,6 +80,20 @@ flowchart TD
     User --> UsersDB
 ```
 
+## Voor- en Nadelen van Microservices
+
+### Voordelen
+
+- Makkelijk schaalbaar: We kunnen delen van de applicatie apart groter maken als dat nodig is, zonder de hele app aan te passen.
+- Teams kunnen los van elkaar werken: Elk team kan aan zijn eigen onderdeel werken en het ook apart online zetten.
+- Vrijheid in technologie: Elk onderdeel mag zijn eigen programmeertaal of database gebruiken als dat beter past.
+
+### Nadelen
+
+- Meer onderdelen: We hebben veel losse stukjes software die goed met elkaar moeten samenwerken, dat is moeilijker dan één geheel.
+- Fouten opsporen is lastiger: Als er iets misgaat, is het moeilijker om te vinden waar precies.
+- Meer werk voor DevOps: Dingen zoals het online zetten, updaten en beheren van de onderdelen zijn complexer.
+
 ## Fysieke Architectuur (Microservices)
 
 In dit model draait elke service in een aparte Docker-container binnen een Kubernetes-cluster.
@@ -98,8 +112,9 @@ De CI/CD pipeline met GitHub Actions zorgt ervoor dat bij elke wijziging automat
 
 ## Monitoring, Authenticatie en Resilience
 
-Monitoring gebeurt via endpoints zoals /health, die worden gecontroleerd door Kubernetes.
+De microservicesarchitectuur ondersteunt:
 
-Authenticatie wordt geregeld met een aparte auth-service en tokens (zoals JWT).
+- **Monitoring** via `/health` endpoints en Prometheus. In deze demo is dit geïmplementeerd op de Game Service. Zie `monitoring.md` voor details.
+- **Authenticatie** via een aparte `auth-service` met JWT-tokens. Routes kunnen beveiligd worden met middleware. Meer uitleg staat in `authentication.md`.
 
-Resilience wordt bereikt door gebruik te maken van Kubernetes’ self-healing (restart on failure) en door fallback-mechanismen (bijvoorbeeld bij het falen van externe API-integraties).
+- **Resilience** dankzij Kubernetes (herstart bij falen), retries (bij tijdelijke netwerkfouten) en fallback-mechanismen (zoals een lege lijst als een externe service faalt). Details in `resilience.md`.

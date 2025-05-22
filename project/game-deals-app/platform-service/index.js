@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const pool = require("./db");
+const authenticateToken = require("./middleware/auth");
 
 const app = express();
 const PORT = 3002;
@@ -19,7 +20,7 @@ async function retryQuery(queryFn, retries = 3, delay = 500) {
   }
 }
 
-app.get("/platforms", async (req, res) => {
+app.get("/platforms", /*authenticateToken,*/ async (req, res) => {
   try {
     const [rows] = await retryQuery(() =>
       pool.query("SELECT name FROM tbl_platform")

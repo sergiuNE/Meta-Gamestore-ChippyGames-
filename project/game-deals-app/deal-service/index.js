@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const pool = require("./db");
+const authenticateToken = require("./middleware/auth");
 
 const app = express();
 const PORT = 3004;
@@ -20,44 +21,51 @@ async function retryQuery(queryFn, retries = 3, delay = 500) {
   }
 }
 
-app.get("/deals", async (req, res) => {
-  try {
-    const gameId = req.query.gameId;
+app.get(
+  "/deals",
+  /*authenticateToken,*/ async (req, res) => {
+    try {
+      const gameId = req.query.gameId;
 
-    let query = "SELECT * FROM deals";
-    let values = [];
+      let query = "SELECT * FROM deals";
+      let values = [];
 
-    if (gameId) {
-      query += " WHERE gameId = ?";
-      values.push(gameId);
+      if (gameId) {
+        query += " WHERE gameId = ?";
+        values.push(gameId);
+      }
+
+      const [rows] = await retryQuery(() => pool.query(query, values));
+
+      res.json(rows);
+    } catch (err) {
+      console.error("Fout bij ophalen van deals:", err);
+      res.status(500).json({ error: "Internal server error" });
     }
-
-    const [rows] = await retryQuery(() => pool.query(query, values));
-
-    res.json(rows);
-  } catch (err) {
-    console.error("Fout bij ophalen van deals:", err);
-    res.status(500).json({ error: "Internal server error" });
   }
-});
+);
 
-app.get("/deals/:id", async (req, res) => {
-  const dealId = parseInt(req.params.id);
-  try {
-    const [rows] = await pool.query("SELECT * FROM deals WHERE id = ?", [
-      dealId,
-    ]);
+app.get(
+  "/deals/:id",
+  /*authenticateToken,*/ async (req, res) => {
+    const gameId = parseInt(req.params.id);
+    try {
+      const [rows] = await pool.query("SELECT * FROM deals WHERE id = ?", [
+        gameId,
+      ]);
 
-    if (rows.length === 0) {
-      return res.status(404).json({ error: "Deal not found" });
+      if (rows.length === 0) {
+        return res.status(404).json({ error: "Deal not found" });
+      }
+
+      //res.json(rows[0]);
+      res.json(rows);
+    } catch (err) {
+      console.error("Fout bij ophalen van deal:", err);
+      res.status(500).json({ error: "Internal server error" });
     }
-
-    res.json(rows[0]);
-  } catch (err) {
-    console.error("Fout bij ophalen van deal:", err);
-    res.status(500).json({ error: "Internal server error" });
   }
-});
+);
 
 // Health
 app.get("/health", (req, res) => {

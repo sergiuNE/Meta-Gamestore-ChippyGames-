@@ -8,7 +8,7 @@ Een monolithische applicatie is eenvoudiger te bouwen en debuggen in de beginfas
 
 ## Beslissing
 
-Voor het analyseren en begrijpen van de logische structuur starten we met een monolithische layered architecture. In onze implementatie splitsen we de onderdelen wel meteen op in afzonderlijke services.
+Voor de initiële analyse werken we in een monolithisch denkmodel, terwijl de implementatie microservices volgt.
 
 ## Consequenties
 

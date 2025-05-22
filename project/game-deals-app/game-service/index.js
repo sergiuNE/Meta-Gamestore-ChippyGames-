@@ -3,8 +3,28 @@ const app = express();
 const PORT = 3001;
 const cors = require("cors");
 const axios = require("axios");
+const authenticateToken = require("./middleware/auth");
 
 app.use(cors());
+
+//Retries
+const { default: axiosRetry } = require("axios-retry");
+axiosRetry(axios, {
+  retries: 3, // Probeer het max 3 keer
+  retryDelay: axiosRetry.exponentialDelay, // Exponentiële wachttijd
+  retryCondition: (error) => {
+    return axiosRetry.isNetworkError(error) || error.response?.status >= 500;
+  },
+});
+
+//Voor metrics
+const client = require("prom-client");
+const collectDefaultMetrics = client.collectDefaultMetrics;
+collectDefaultMetrics();
+
+const register = new client.Registry();
+register.setDefaultLabels({ app: "gameplatform" });
+collectDefaultMetrics({ register });
 
 const games = [
   {
@@ -29,18 +49,25 @@ const games = [
   },
 ];
 
-app.get("/games", (req, res) => {
-  const { title = "", platform = "" } = req.query;
+app.get(
+  "/games",
+  /*authenticateToken,*/ (req, res) => {
+    const { title = "", platform = "" } = req.query;
 
-  const filteredGames = games.filter((game) => {
-    const matchesTitle = game.title.toLowerCase().includes(title.toLowerCase());
-    const matchesPlatform =
-      platform === "" || game.platforms.includes(platform);
-    return matchesTitle && matchesPlatform;
-  });
+    const filteredGames = games.filter((game) => {
+      const matchesTitle = game.title
+        .toLowerCase()
+        .includes(title.toLowerCase());
+      const matchesPlatform =
+        platform === "" || game.platforms.includes(platform);
+      return matchesTitle && matchesPlatform;
+    });
 
-  res.json(filteredGames);
-});
+    res.json(filteredGames);
+  }
+);
+
+//const DEAL_SERVICE_URL = "http://localhost:3004";
 
 const DEAL_SERVICE_URL =
   process.env.DEAL_SERVICE_URL || "http://deal-service:80";
@@ -48,11 +75,11 @@ const DEAL_SERVICE_URL =
 async function getDealsForGame(gameId) {
   try {
     const url = `${DEAL_SERVICE_URL}/deals?gameId=${gameId}`;
-    const response = await axios.get(url);
+    const response = await axios.get(url, { timeout: 1000 });
     return response.data;
   } catch (error) {
-    console.error(`Error fetching deals for game ${gameId}:`, error.message);
-    return [];
+    console.error(`Fallback: geen deals voor game ${gameId}`);
+    return []; //// fallback response
   }
 }
 
@@ -62,7 +89,7 @@ app.get("/games-with-deals", async (req, res) => {
     // Clone the games array
     const gamesWithDeals = JSON.parse(JSON.stringify(games));
 
-    // Add deals to each game
+    // Add deal to each game
     for (let game of gamesWithDeals) {
       const deals = await getDealsForGame(game.id);
       game.deals = deals;
@@ -81,6 +108,11 @@ app.get("/games-with-deals", async (req, res) => {
 // Health
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
+});
+
+app.get("/metrics", async (req, res) => {
+  res.set("Content-Type", register.contentType);
+  res.end(await register.metrics());
 });
 
 //Root

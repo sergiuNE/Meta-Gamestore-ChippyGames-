@@ -1,10 +1,8 @@
-# Dit document hoort bij de implementatiefase
+# Deze sectie maakt deel uit van de technische implementatie
 
 # Observability in mijn microservices
 
 Ik zorg ervoor dat elke service makkelijk te controleren is, met logging en healthchecks.
-
----
 
 ## 1. Logging (via `console.log`, `console.error`, en `console.warn`)
 
@@ -40,4 +38,5 @@ app.get("/health", (req, res) => {
 ## Optioneel
 
 - Morgan gebruiken om automatisch alle HTTP-aanvragen te loggen.
-- Toevoegen van Metrics en tracing voor nog meer inzicht.
+- Toevoegen van Metrics en tracing voor nog meer inzicht. (Voor bottlenecks...)
+- Elastic Stack gebruiken om logingegevens te analyseren

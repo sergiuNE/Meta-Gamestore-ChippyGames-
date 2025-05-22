@@ -23,17 +23,17 @@ We combineren twee manieren om het systeem te begrijpen:
 - Curatie Module: laat curators content goedkeuren of samenvoegen
 - Collectiebeheer: gebruikers beheren hun eigen games
 - Aanbevelingssysteem: stelt nieuwe games voor op basis van jouw collectie en ratings
-- Notificatieservice: laat je weten wanneer een game een promotie heeft
+- Notificatieservice: laat de gebruiker weten wanneer een game een promotie heeft
 - Analytics & Affiliates: houdt inkomsten en kosten bij, toont hoeveel er is opgehaald
 - Admin Dashboard: beheert het systeem
 
 ## Workflow (voorbeeld):
 
 1. Inloggen
-   -> Je logt in, je voorkeuren worden geladen
+   -> De gebruiker logt in, gebruikers voorkeuren worden geladen
 
 2. Games bekijken
-   -> Je bezoekt een gamepagina
+   -> De gebruiker bezoekt een gamepagina
    -> De app toont info uit de catalogus én de beste deals van het moment
 
 3. Game toevoegen aan collectie
@@ -42,10 +42,10 @@ We combineren twee manieren om het systeem te begrijpen:
 
 4. Prijs volgen
    -> De notificatieservice houdt de prijs in de gaten
-   -> Je krijgt een melding als de prijs onder je drempel komt
+   -> De gebruiker ontvangt een melding als de prijs onder zijn/haar drempel komt
 
 5. Games uploaden
-   -> Je voegt zelf een game toe
+   -> De gebruiker voegt zelf een game toe
    -> De curator keurt ze goed
 
 ## Diagram
