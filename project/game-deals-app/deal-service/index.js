@@ -25,18 +25,32 @@ app.get(
   "/deals",
   /*authenticateToken,*/ async (req, res) => {
     try {
-      const gameId = req.query.gameId;
+      //const gameId = req.query.gameId;
+      const { gameId } = req.query;
 
       let query = "SELECT * FROM deals";
       let values = [];
 
+      /*
       if (gameId) {
         query += " WHERE gameId = ?";
         values.push(gameId);
+        console.log("Querying deals for gameId:", gameId); //weg
+      }*/
+
+      if (gameId !== undefined) {
+        const parsedGameId = parseInt(gameId, 10);
+        if (!Number.isInteger(parsedGameId)) {
+          return res.status(400).json({ error: "Invalid gameId" });
+        }
+
+        query += " WHERE gameId = ?";
+        values.push(parsedGameId);
+
+        console.log("Querying deals for gameId:", parsedGameId);
       }
 
       const [rows] = await retryQuery(() => pool.query(query, values));
-
       res.json(rows);
     } catch (err) {
       console.error("Fout bij ophalen van deals:", err);
@@ -48,11 +62,9 @@ app.get(
 app.get(
   "/deals/:id",
   /*authenticateToken,*/ async (req, res) => {
-    const gameId = parseInt(req.params.id);
+    const id = parseInt(req.params.id);
     try {
-      const [rows] = await pool.query("SELECT * FROM deals WHERE id = ?", [
-        gameId,
-      ]);
+      const [rows] = await pool.query("SELECT * FROM deals WHERE id = ?", [id]);
 
       if (rows.length === 0) {
         return res.status(404).json({ error: "Deal not found" });
