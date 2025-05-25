@@ -89,7 +89,7 @@ Voor de initiële analyse werken we in een monolithisch denkmodel, terwijl de im
 
 ## Context
 
-We beheren veel gestructureerde data: gebruikers, games, deals...
+We beheren veel gestructureerde data: gebruikers, platformen, deals...
 
 ## Beslissing
 
@@ -118,13 +118,18 @@ We beginnen met een **laag-voor-laag (layered) monolithische architectuur**, die
 - Minder infrastructuur nodig in het begin.
 - Eenvoudiger te testen en fouten op te lossen.
 
-Deze structuur maakt het later makkelijker om over te stappen naar microservices, omdat de onderdelen nu al logisch gescheiden zijn.
+### Nadelen
+
+- Kwetsbaar
+- Vrij lastig te testen
+
+Deze structuur maakt het later makkelijker om over te stappen naar microservices, omdat de onderdelen nu al logisch gescheiden zijn. We kiezen niet voor een modulaire monoliet omdat
 
 ---
 
 ## Van Logische naar Fysieke Architectuur
 
-### Monolithisch Model (Layered Architecture)
+### Visueel overzicht van de Monolith (Fase 1)
 
 ```mermaid
 flowchart TD
@@ -140,11 +145,11 @@ flowchart TD
 
 In het begin zitten alle onderdelen (UI, logica en data) samen in één Node.js-applicatie. Alles draait in één codebase, op één server of container. Alleen de database is apart.
 
-In de microservices-versie splitsen we elk onderdeel op in een aparte service (bijv. gebruikers, games, deals...). Elk draait in zijn eigen ‘Pod’ in Kubernetes. Een Pod is een soort ‘doos’ waarin een applicatie draait binnen Kubernetes.
+In de microservices-versie splitsen we elk onderdeel op in een aparte service (bijv. gebruikers, games, deals...). Elk draait in zijn eigen ‘Pod’ in Kubernetes.
 
 ## Microservices Architectuur
 
-Onderstaande tekening toont de microservices-architectuur. Deze bestaat uit een API Gateway, aparte backendservices en koppelingen met externe diensten (zoals game stores).
+Onderstaande tekening toont de microservices-architectuur. Deze bestaat uit aparte backendservices. Onderstaande tekening toont alleen de uitgewerkte services.
 
 ```mermaid
 flowchart TD
@@ -238,8 +243,7 @@ De microservicesarchitectuur ondersteunt:
 ## Rollen in het systeem
 
 - **Gebruiker**: kan zoeken, collecties maken, deals bekijken.
-- **Curator**: kan extra content beheren, zoals media of aanbevelingen.
-- **Admin**: heeft toegang tot beheerfuncties en gebruikersbeheer.
+- **Admin**: heeft toegang tot beheerfuncties en gebruikersbeheer. Alleen een admin mag gebruikers verwijderen of platformdata aanpassen!
 
 ## Beveiligingsmaatregelen
 
@@ -295,7 +299,10 @@ Elke service moet apart aangepast kunnen worden zonder dat andere onderdelen kap
 
 ### 5. Beveiliging (Security)
 
-Gebruikersgegevens zoals wachtwoorden, collecties en voorkeuren moeten veilig worden opgeslagen en verstuurd.
+- Gebruikersgegevens zoals wachtwoorden, collecties en voorkeuren moeten veilig worden opgeslagen en verstuurd.
+- Bescherming tegen injection.
+- Cooldown na drie mislukte inlogpogingen.
+- Alle communicatie verloopt via HTTPS (in productie).
 
 ---
 
@@ -325,32 +332,6 @@ Gebruikersgegevens zoals wachtwoorden, collecties en voorkeuren moeten veilig wo
 
 ---
 
-# Context Diagram
-
-Dit is een overzicht van de interactie tussen ons platform en de externe gebruikers of systemen.
-
-## Externe Gebruikers
-
-- **Bezoeker**: kan door games bladeren en kortingen zien, maar is niet ingelogd.
-- **Ingelogde gebruiker**: kan collecties maken, games volgen en gepersonaliseerde aanbiedingen bekijken.
-- **Curator**: kan content beheren, zoals aanbevelingen of media.
-- **Admin**: beheert gebruikers en systeeminstellingen.
-
-## Externe Systemen
-
-- **Winkels zoals Steam, Amazon en Epic Games**: leveren gameprijzen, details en promoties via hun API’s.
-
-## Ons Platform
-
-- **ChippyGames-platform**: het centrale systeem dat alle data verzamelt, verwerkt en toont aan gebruikers.
-
-## Interfaces
-
-- **REST API**: zorgt voor communicatie tussen frontend en backend.
-- **Webinterface**: de website die gebruikers zien en gebruiken.
-
----
-
 # Deployment Overzicht
 
 Ons platform draait in een Kubernetes-cluster. De verschillende onderdelen van het systeem zijn opgedeeld in aparte services en worden automatisch beheerd en geschaald.
@@ -369,7 +350,7 @@ Ons platform draait in een Kubernetes-cluster. De verschillende onderdelen van h
   - `platform-service`: regelt platforms en winkelintegraties.
 
 - **Database**:
-  Alle services gebruiken een gezamenlijke database-‘deployment’, genaamd `db-deployment`. Hierin zitten meerdere MySQL-databases (zoals `users-db`, `deals-db`, `platforms-db`).
+  Alle services gebruiken een gezamenlijke database-‘deployment’, genaamd `db-deployment`. Hierin zitten meerdere MySQL-databases (zoals `users-db`, `deals-db`, `platforms-db`, `games-db`).
 
 ## Visueel Overzicht
 
@@ -411,7 +392,6 @@ We combineren twee manieren om het systeem te begrijpen:
 
 - Bezoeker (Niet ingelogd)
 - Gebruiker: ingelogd, met een persoonlijke collectie
-- Curator: keurt content goed, voorkomt dubbele of slechte games
 - Winkel-API's: zoals Steam, Amazon, PlayStation Store…
 - Admin: beheert het platform
 
@@ -419,15 +399,55 @@ We combineren twee manieren om het systeem te begrijpen:
 
 - User Service: regelt login, registratie, profiel en authenticatie
 - Game Service: beheert games, beschrijvingen, afbeeldingen en ratings
-- Deals Service: verzamelt prijzen uit winkels
+- Deal Service: verzamelt prijzen uit winkels
 - Platform Service: beheert platforms (PC, PS5, Switch...)
-- Store Connectors: haalt automatisch data op uit winkels via API's of scraping
-- Curatie Module: laat curators content goedkeuren of samenvoegen
-- Collectiebeheer: gebruikers beheren hun eigen games
-- Aanbevelingssysteem: stelt nieuwe games voor op basis van jouw collectie en ratings
-- Notificatieservice: laat de gebruiker weten wanneer een game een promotie heeft
-- Analytics & Affiliates: houdt inkomsten en kosten bij, toont hoeveel er is opgehaald
-- Admin Dashboard: beheert het systeem
+- Store Service: haalt automatisch data op uit winkels via API's of scraping
+- Collection Service: gebruikers beheren hun eigen games
+- Recommendation Service: stelt nieuwe games voor op basis van jouw collectie en ratings
+- Notification Service: laat de gebruiker weten wanneer een game een promotie heeft
+- Analytics Service: houdt inkomsten en kosten bij, toont hoeveel er is opgehaald
+- Admin Service: beheert het systeem
+
+## Organisatie broncode
+
+- De services zijn te zien in de structuur van mijn applicatie.
+
+## Sequence Diagram (Actor/Action approach)
+
+```mermaid
+sequenceDiagram
+    participant Gebruiker
+    participant UI
+    participant UserService
+    participant GameService
+    participant DealService
+    participant CollectionService
+    participant RecommendationService
+    participant NotificationService
+
+    Gebruiker->>UI: Inloggen
+    UI->>UserService: Valideer login
+    UserService-->>UI: Bevestiging + voorkeuren
+
+    Gebruiker->>UI: Bekijk games
+    UI->>GameService: Haal gamedata
+    UI->>DealService: Haal actuele deals
+    GameService-->>UI: Game-informatie
+    DealService-->>UI: Beste prijzen
+
+    Gebruiker->>UI: Voeg game toe aan collectie
+    UI->>CollectionService: Voeg game toe
+    CollectionService-->>UI: Bevestiging
+    CollectionService->>RecommendationService: Update aanbevelingen
+
+    Gebruiker->>UI: Volg prijs
+    UI->>NotificationService: Stel prijsdrempel in
+    NotificationService-->>Gebruiker: Bevestiging melding geactiveerd
+
+    NotificationService-->>Gebruiker: Stuur melding bij promotie
+```
+
+### Dit is de notatie voor een sequence diagram maar het is geen sequence diagram. Het drukt iets anders uit.
 
 ## Workflow (voorbeeld):
 
@@ -448,91 +468,118 @@ We combineren twee manieren om het systeem te begrijpen:
 
 5. Games uploaden
    -> De gebruiker voegt zelf een game toe
-   -> De curator keurt ze goed
 
-## Diagram
-
-```mermaid
-graph TD
-    UI[Gebruikersinterface]
-    User[User Service]
-    Games[Game Service]
-    Deals[Deals Service]
-    Platform[Platform Service]
-    Connectors[Store Connectors]
-    Curatie[Curatie Module]
-    Collectie[Collectiebeheer]
-    Aanbevelingen[Aanbevelingssysteem]
-    Notificatie[Notificatieservice]
-    Analytics[Analytics & Affiliates]
-    Admin[Admin Dashboard]
-    DB[(Databases)]
-
-    UI --> UserService
-    UI --> GameService
-    UI --> DealService
-    UI --> PlatformService
-    UI --> Curatie
-    UI --> Collectie
-    UI --> Aanbevelingen
-    UI --> Notificatie
-    UI --> Analytics
-    UI --> Admin
-
-    DealService --> Connectors
-    GameService --> Connectors
-    UserService --> Connectors
-    PlatformService --> Connectors
-    DealService --> DB
-    UserService --> DB
-    PlatformService --> DB
-    Curatie --> DB
-    Collectie --> DB
-    Aanbevelingen --> DB
-    Notificatie --> DB
-    Analytics --> DB
-    Admin --> DB
-```
-
-## Diagram met Actoren
+## Mapping logische componenten
 
 ```mermaid
 graph TD
-    Bezoeker[Bezoeker]
-    Gebruiker[Ingelogde Gebruiker]
-    Curator[Curator]
-    Admin[Admin]
+  subgraph Gebruikersbeheer
+    UserService["User Service"]
+    CollectionService["Collection Service"]
+  end
 
-    Bezoeker --> UI
-    Gebruiker --> UI
-    Curator --> UI
-    Admin --> Admin
+  subgraph Gamebeheer
+    GameService["Game Service"]
+    RecommendationService["Recommendation Service"]
+    DealService["Deal Service"]
+    NotificationService["Notification Service"]
+  end
 
-    UI --> UserService
-    UI --> GameService
-    UI --> DealService
-    UI --> PlatformService
-    UI --> Curatie
-    UI --> Collectie
-    UI --> Aanbevelingen
-    UI --> Notificatie
-    UI --> Analytics
-    UI --> Admin
+  subgraph Platform & Winkels
+    PlatformService["Platform Service"]
+    StoreService["Store Service"]
+  end
 
-    DealService --> Connectors
-    GameService --> Connectors
-    UserService --> Connectors
-    PlatformService --> Connectors
-    DealService --> DB
-    UserService --> DB
-    PlatformService --> DB
-    Curatie --> DB
-    Collectie --> DB
-    Aanbevelingen --> DB
-    Notificatie --> DB
-    Analytics --> DB
-    Admin --> DB
+  subgraph Beheer & Analyse
+    AdminService["Admin Service"]
+    AnalyticsService["Analytics Service"]
+  end
+
+  %% Databases
+  DBUser[(DB User)]
+  DBGame[(DB Game)]
+  DBStore[(DB Store)]
+  DBAnalytics[(DB Analytics)]
+
+  %% Connecties naar DB's
+  UserService --> DBUser
+  CollectionService --> DBUser
+
+  GameService --> DBGame
+  RecommendationService --> DBGame
+  DealService --> DBGame
+  NotificationService --> DBGame
+
+  PlatformService --> DBStore
+  StoreService --> DBStore
+
+  AdminService --> DBAnalytics
+  AnalyticsService --> DBAnalytics
+
+  %% Interne afhankelijkheden
+  CollectionService --> GameService
+  RecommendationService --> CollectionService
+  DealService --> StoreService
+  NotificationService --> DealService
+  NotificationService --> UserService
 ```
+
+## Requirements toewijzen aan componenten
+
+```mermaid
+graph TD
+  PlatformService["Platform Service"]
+  GameService["Game Service"]
+  DealService["Deal Service"]
+  RecommendationService["Recommendation Service"]
+  UserService["User Service"]
+  NotificationService["Notification Service"]
+
+  R1["Gebruiker kiest platform"] --> PlatformService
+  R2["Ondersteunt fysieke/digitale media"] --> PlatformService
+  R3["Toekomstige releases zichtbaar"] --> GameService
+  R4["Collectie manueel of automatisch beheren"] --> GameService
+  R4 --> PlatformService
+  R4 --> DealService
+  R7["Gebruikersratings"] --> GameService
+  R8["Prijsgeschiedenis bijhouden"] --> DealService
+  R9["Prijsnotificaties"] --> NotificationService
+  R10["Aanbevelingen op basis van voorkeuren"] --> RecommendationService
+  R11["Veerkracht bij storingen"] --> DealService
+  R12["Sales in de verf zetten"] --> DealService
+```
+
+## Rol en verantwoordelijkheden analyseren
+
+- De Game Service is verantwoordelijk voor gamegegevens en hun verwerking. Cohesie is hoog: alle functies draaien rond games.
+- De Deal Service verwerkt en bewaart prijshistoriek en aanbiedingen. Cohesie is hoog: gericht op één doel: deals ophalen, filteren en tonen.
+- De Platform Service beheert platformen. Cohesie is hoog: Gaat uitsluitend over het platform-aspect van het systeem.
+- De User Service beheert gebruikersgegevens, login/registratie en profielen. Cohesie matig tot hoog: Gaat over gebruikers, maar kan in de toekomst meer gesplitst worden (bijv. aparte auth service).
+
+## Architecturale karakteristieken analyseren (gebaseerd op de driving characteristics)
+
+### Live bijwerken van gegevens (Performance)
+
+- Deal Service maakt snelle updates en caching mogelijk voor prijsinfo.
+- Game Service toont nieuwe releases direct.
+
+### Blijft werken bij externe storingen (Resilience)
+
+- Deal Service bevat retries, fallbacks en circuit breakers.
+
+### Personalisatie & Aanbevelingen (UX / Intelligence)
+
+- Recommendation Service verwerkt voorkeuren, ratings en gedrag.
+- User Service bewaart gebruikersinstellingen
+
+## Afferente vs. Efferente koppeling per component
+
+### Component, Afferente Koppeling, Efferente Koppeling, Uitleg
+
+- Game Service: Hoog, Gemiddeld, Wordt door veel services gebruikt (frontend, aanbevelingen), haalt data van deals op
+- Deal Service: Hoog, Hoog, Veel componenten raadplegen deals, en het hangt af van externe APIs
+- User Service: Hoog, Laag, Gebruikt vooral zijn eigen database, maar wordt vaak geraadpleegd (auth, voorkeuren)
+- Platform Service: Gemiddeld, Laag, Levert data aan andere services, maar is zelf weinig afhankelijk
 
 # Deze sectie maakt deel uit van de technische implementatie
 
@@ -601,8 +648,8 @@ app.get("/health", (req, res) => {
 ## Optioneel
 
 - Morgan gebruiken om automatisch alle HTTP-aanvragen te loggen.
-- Toevoegen van Metrics en tracing voor nog meer inzicht. (Voor bottlenecks...)
-- Elastic Stack gebruiken om logingegevens te analyseren
+- Elastic Stack gebruiken om logingegevens te analyseren.
+- Extra: Gebruik maken van Zipkin voor tracing.
 
 ---
 
@@ -637,14 +684,3 @@ return []; // fallback als deals niet opgehaald kunnen worden
 ```
 
 ---
-
-# Lessons Learned
-
-Tijdens dit project zijn inzichten opgedaan over CI/CD, microservices en Kubernetes deployments. Deze ervaring vormt de basis voor verdere optimalisatie van het systeem.
-
-# Roadmap (Toekomstige Verbeteringen)
-
-- CI/CD uitbreiden naar een extern Kubernetes-cluster (GKE)
-- Toevoegen van gebruikersfeatures zoals ratingsknop en notificaties
-- Inloggen/Registreren
-- Integraties uitbreiden met externe API's zoals Steam, G2A

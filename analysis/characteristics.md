@@ -20,7 +20,10 @@ Elke service moet apart aangepast kunnen worden zonder dat andere onderdelen kap
 
 ### 5. Beveiliging (Security)
 
-Gebruikersgegevens zoals wachtwoorden, collecties en voorkeuren moeten veilig worden opgeslagen en verstuurd.
+- Gebruikersgegevens zoals wachtwoorden, collecties en voorkeuren moeten veilig worden opgeslagen en verstuurd.
+- Bescherming tegen injection.
+- Cooldown na drie mislukte inlogpogingen.
+- Alle communicatie verloopt via HTTPS (in productie).
 
 ---
 

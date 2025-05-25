@@ -4,7 +4,7 @@
 
 ## Context
 
-We beheren veel gestructureerde data: gebruikers, games, deals...
+We beheren veel gestructureerde data: gebruikers, platformen, deals...
 
 ## Beslissing
 

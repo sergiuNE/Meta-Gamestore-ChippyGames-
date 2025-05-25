@@ -8,7 +8,7 @@ const PORT = 3002;
 
 app.use(cors());
 
-async function retryQuery(queryFn, retries = 3, delay = 500) {
+async function retryQuery(queryFn, retries = 3, delay = 500) { //Retries
   for (let i = 0; i < retries; i++) {
     try {
       return await queryFn();

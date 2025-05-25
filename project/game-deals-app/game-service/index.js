@@ -18,7 +18,7 @@ axiosRetry(axios, {
 });
 
 //Voor metrics
-const client = require("prom-client");
+const client = require("prom-client"); //Prometheus 
 const collectDefaultMetrics = client.collectDefaultMetrics;
 collectDefaultMetrics();
 

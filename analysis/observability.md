@@ -38,5 +38,5 @@ app.get("/health", (req, res) => {
 ## Optioneel
 
 - Morgan gebruiken om automatisch alle HTTP-aanvragen te loggen.
-- Toevoegen van Metrics en tracing voor nog meer inzicht. (Voor bottlenecks...)
-- Elastic Stack gebruiken om logingegevens te analyseren
+- Elastic Stack gebruiken om logingegevens te analyseren.
+- Extra: Gebruik maken van Zipkin voor tracing.

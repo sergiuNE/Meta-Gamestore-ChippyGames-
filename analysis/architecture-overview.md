@@ -15,13 +15,18 @@ We beginnen met een **laag-voor-laag (layered) monolithische architectuur**, die
 - Minder infrastructuur nodig in het begin.
 - Eenvoudiger te testen en fouten op te lossen.
 
-Deze structuur maakt het later makkelijker om over te stappen naar microservices, omdat de onderdelen nu al logisch gescheiden zijn.
+### Nadelen
+
+- Kwetsbaar
+- Vrij lastig te testen
+
+Deze structuur maakt het later makkelijker om over te stappen naar microservices, omdat de onderdelen nu al logisch gescheiden zijn. We kiezen niet voor een modulaire monoliet omdat
 
 ---
 
 ## Van Logische naar Fysieke Architectuur
 
-### Monolithisch Model (Layered Architecture)
+### Visueel overzicht van de Monolith (Fase 1)
 
 ```mermaid
 flowchart TD
@@ -37,11 +42,11 @@ flowchart TD
 
 In het begin zitten alle onderdelen (UI, logica en data) samen in één Node.js-applicatie. Alles draait in één codebase, op één server of container. Alleen de database is apart.
 
-In de microservices-versie splitsen we elk onderdeel op in een aparte service (bijv. gebruikers, games, deals...). Elk draait in zijn eigen ‘Pod’ in Kubernetes. Een Pod is een soort ‘doos’ waarin een applicatie draait binnen Kubernetes.
+In de microservices-versie splitsen we elk onderdeel op in een aparte service (bijv. gebruikers, games, deals...). Elk draait in zijn eigen ‘Pod’ in Kubernetes.
 
 ## Microservices Architectuur
 
-Onderstaande tekening toont de microservices-architectuur. Deze bestaat uit een API Gateway, aparte backendservices en koppelingen met externe diensten (zoals game stores).
+Onderstaande tekening toont de microservices-architectuur. Deze bestaat uit aparte backendservices. Onderstaande tekening toont alleen de uitgewerkte services.
 
 ```mermaid
 flowchart TD
@@ -92,7 +97,6 @@ flowchart TD
 
 - Meer onderdelen: We hebben veel losse stukjes software die goed met elkaar moeten samenwerken, dat is moeilijker dan één geheel.
 - Fouten opsporen is lastiger: Als er iets misgaat, is het moeilijker om te vinden waar precies.
-- Meer werk voor DevOps: Dingen zoals het online zetten, updaten en beheren van de onderdelen zijn complexer.
 
 ## Fysieke Architectuur (Microservices)
 

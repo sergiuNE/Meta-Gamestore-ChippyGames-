@@ -4,18 +4,19 @@ Ons platform draait in een Kubernetes-cluster. De verschillende onderdelen van h
 
 ## Onderdelen
 
-- **API Gateway** 
- We gebruiken een Nginx Ingress Controller om inkomend verkeer van gebruikers naar de juiste service te sturen.
+- **API Gateway**
+  We gebruiken een Nginx Ingress Controller om inkomend verkeer van gebruikers naar de juiste service te sturen.
 
 - **Services**:
   Elke service draait als een aparte “deployment” in Kubernetes:
+
   - `user-service`: beheert gebruikers en authenticatie.
   - `game-service`: houdt info bij over games.
   - `deal-service`: verwerkt aanbiedingen en prijzen.
   - `platform-service`: regelt platforms en winkelintegraties.
 
 - **Database**:
-  Alle services gebruiken een gezamenlijke database-‘deployment’, genaamd `db-deployment`. Hierin zitten meerdere MySQL-databases (zoals `users-db`, `deals-db`, `platforms-db`).
+  Alle services gebruiken een gezamenlijke database-‘deployment’, genaamd `db-deployment` (PostgreSQL). Hierin zitten meerdere MySQL-databases (zoals `users-db`, `deals-db`, `platforms-db`, `games-db`).
 
 ## Visueel Overzicht
 
@@ -37,6 +38,7 @@ graph TD
     DealService --> DB
     PlatformService --> DB
 ```
+
 ## Uitleg
 
 - Elke service draait als een eigen Deployment met 2 replicas.

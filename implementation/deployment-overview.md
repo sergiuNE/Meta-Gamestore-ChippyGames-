@@ -67,7 +67,11 @@ Ingress-bestand: `k8s/ingress.yaml`
 
 ## Opstartvolgorde
 
-1. Database (PostgreSQL) (automatisch)
+1. Database-laag (automatisch)
+
+- PostgreSQL voor db-deployment
+- MySQL voor service-specifieke databases (deals-db, platforms-db, users-db)
+
 2. Microservices (deal, game, platform, user)
 3. Ingress-controller
 4. Frontend via Docker Compose
