@@ -25,18 +25,10 @@ app.get(
   "/deals",
   /*authenticateToken,*/ async (req, res) => {
     try {
-      //const gameId = req.query.gameId;
       const { gameId } = req.query;
 
       let query = "SELECT * FROM deals";
       let values = [];
-
-      /*
-      if (gameId) {
-        query += " WHERE gameId = ?";
-        values.push(gameId);
-        console.log("Querying deals for gameId:", gameId); //weg
-      }*/
 
       if (gameId !== undefined) {
         const parsedGameId = parseInt(gameId, 10);
@@ -70,7 +62,6 @@ app.get(
         return res.status(404).json({ error: "Deal not found" });
       }
 
-      //res.json(rows[0]);
       res.json(rows);
     } catch (err) {
       console.error("Fout bij ophalen van deal:", err);
@@ -79,7 +70,6 @@ app.get(
   }
 );
 
-// Health
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });

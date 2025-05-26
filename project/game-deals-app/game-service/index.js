@@ -7,18 +7,17 @@ const authenticateToken = require("./middleware/auth");
 
 app.use(cors());
 
-//Retries
 const { default: axiosRetry } = require("axios-retry");
 axiosRetry(axios, {
-  retries: 3, // Probeer het max 3 keer
-  retryDelay: axiosRetry.exponentialDelay, // Exponentiële wachttijd
+  retries: 3,
+  retryDelay: axiosRetry.exponentialDelay,
   retryCondition: (error) => {
     return axiosRetry.isNetworkError(error) || error.response?.status >= 500;
   },
 });
 
-//Voor metrics
-const client = require("prom-client"); //Prometheus 
+//Metrics
+const client = require("prom-client"); //Prometheus
 const collectDefaultMetrics = client.collectDefaultMetrics;
 collectDefaultMetrics();
 
@@ -43,8 +42,6 @@ const games = [
     platforms: ["PC", "PlayStation 4", "PlayStation 5", "Xbox", "Nintendo"],
     genre: "Action",
     rating: 4,
-    //price: "45.00€",
-    //sale: "25%",
     saleFrom: "MediaMarkt",
   },
 ];
@@ -67,8 +64,6 @@ app.get(
   }
 );
 
-//const DEAL_SERVICE_URL = "http://localhost:3004";
-
 const DEAL_SERVICE_URL =
   process.env.DEAL_SERVICE_URL || "http://deal-service:80";
 
@@ -79,17 +74,14 @@ async function getDealsForGame(gameId) {
     return response.data;
   } catch (error) {
     console.error(`Fallback: geen deals voor game ${gameId}`);
-    return []; //// fallback response
+    return [];
   }
 }
 
-// Games with deals endpoint
 app.get("/games-with-deals", async (req, res) => {
   try {
-    // Clone the games array
     const gamesWithDeals = JSON.parse(JSON.stringify(games));
 
-    // Add deal to each game
     for (let game of gamesWithDeals) {
       const deals = await getDealsForGame(game.id);
       game.deals = deals;
@@ -105,7 +97,6 @@ app.get("/games-with-deals", async (req, res) => {
   }
 });
 
-// Health
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
@@ -115,7 +106,6 @@ app.get("/metrics", async (req, res) => {
   res.end(await register.metrics());
 });
 
-//Root
 app.get("/", (req, res) => {
   res.send("Game Service is running!");
 });

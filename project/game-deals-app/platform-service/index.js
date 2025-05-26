@@ -8,7 +8,7 @@ const PORT = 3002;
 
 app.use(cors());
 
-async function retryQuery(queryFn, retries = 3, delay = 500) { //Retries
+async function retryQuery(queryFn, retries = 3, delay = 500) {
   for (let i = 0; i < retries; i++) {
     try {
       return await queryFn();
@@ -20,20 +20,22 @@ async function retryQuery(queryFn, retries = 3, delay = 500) { //Retries
   }
 }
 
-app.get("/platforms", /*authenticateToken,*/ async (req, res) => {
-  try {
-    const [rows] = await retryQuery(() =>
-      pool.query("SELECT name FROM tbl_platform")
-    );
+app.get(
+  "/platforms",
+  /*authenticateToken,*/ async (req, res) => {
+    try {
+      const [rows] = await retryQuery(() =>
+        pool.query("SELECT name FROM tbl_platform")
+      );
 
-    res.json(rows);
-  } catch (err) {
-    console.error("Fout bij ophalen platforms:", err);
-    res.status(500).json({ error: "Interne serverfout" });
+      res.json(rows);
+    } catch (err) {
+      console.error("Fout bij ophalen platforms:", err);
+      res.status(500).json({ error: "Interne serverfout" });
+    }
   }
-});
+);
 
-// Health
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });

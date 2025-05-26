@@ -7,7 +7,7 @@ services:
       - "5173:5173"
     volumes:
       - ./:/app
-      - /app/node_modules # Voorkomt dat node_modules wordt overschreven
+      - /app/node_modules
     environment:
       - VITE_API_PLATFORM_URL=http://localhost:3002
       - VITE_API_GAME_URL=http://localhost:3001

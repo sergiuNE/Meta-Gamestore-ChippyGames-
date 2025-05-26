@@ -1,7 +1,7 @@
 const mysql = require("mysql2/promise");
 
 const pool = mysql.createPool({
-  host: "platforms-db", // containernaam van MySQL
+  host: "platforms-db",
   user: "root",
   password: "root",
   database: "platforms",

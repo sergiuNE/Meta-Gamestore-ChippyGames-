@@ -588,7 +588,6 @@ graph TD
 ## Gebruikte tools:
 
 - **Prometheus**: Verzamelt runtime-metrics van de game-service
-- **Grafana**: Visualiseert de metrics in dashboards
 - **Alertmanager**: Stuurt waarschuwingen bij problemen
 
 ## Wat we monitoren (momenteel enkel voor de Game Service):
@@ -603,7 +602,6 @@ graph TD
 
 ## Opmerking
 
-Hoewel Prometheus en Grafana optioneel zijn tijdens ontwikkeling, zijn ze cruciaal in productie. Ze zorgen voor inzicht in prestaties, foutopsporing en automatische waarschuwingen.
 Voor deze demo zijn metrics enkel geïmplementeerd op de Game Service. In een productieomgeving zouden wij dit uitbreiden naar alle services — bijvoorbeeld via een Prometheus sidecar of door dezelfde code in elk servicebestand op te nemen.
 
 ---

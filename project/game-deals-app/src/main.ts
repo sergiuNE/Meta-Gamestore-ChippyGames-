@@ -26,7 +26,6 @@ async function initPlatformDropdown() {
     });
     platformSelect.value = platforms[0];
   } catch {
-    // fallback
     ["PC", "PlayStation 4", "PlayStation 5", "Xbox", "Nintendo"].forEach(
       (p) => {
         const opt = document.createElement("option");
@@ -37,7 +36,6 @@ async function initPlatformDropdown() {
     );
   }
 
-  // Koppel event listeners
   platformSelect.addEventListener("change", fetchGames);
   searchInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
@@ -62,20 +60,25 @@ async function fetchGames() {
 
   try {
     const [gameRes, dealRes] = await Promise.all([
-      fetch(`${GAME_API_URL}?title=${encodeURIComponent(title)}&platform=${encodeURIComponent(platform)}`),
+      fetch(
+        `${GAME_API_URL}?title=${encodeURIComponent(
+          title
+        )}&platform=${encodeURIComponent(platform)}`
+      ),
       fetch(DEAL_API_URL),
     ]);
 
     const games = await gameRes.json();
     const deals = await dealRes.json();
 
-    // Combineer games met bijhorende deals op basis van title
     const gamesWithDeals = games.map((game: any) => {
-      const matchingDeal = deals.find((deal: any) => deal.id === game.id); // of op basis van title als je wil
+      const matchingDeal = deals.find((deal: any) => deal.id === game.id);
       return {
         ...game,
         sale: matchingDeal?.deal ?? "0%",
-        price: matchingDeal?.price ? `${Number(matchingDeal.price).toFixed(2)}€` : "Onbekend",
+        price: matchingDeal?.price
+          ? `${Number(matchingDeal.price).toFixed(2)}€`
+          : "Onbekend",
       };
     });
 
@@ -91,9 +94,7 @@ async function fetchGames() {
   }
 }
 
-
 function renderGames(games: any[], platform: string) {
-  // Verwijder oude cards
   const oldCards = document.querySelectorAll(".game-card");
   oldCards.forEach((el) => el.remove());
 
@@ -133,20 +134,17 @@ function renderGames(games: any[], platform: string) {
 
 window.addEventListener("DOMContentLoaded", initPlatformDropdown);
 
-// Function to handle login button click
 function setupLoginButton() {
-  const loginButton = document.querySelector('.login-button');
+  const loginButton = document.querySelector(".login-button");
   if (loginButton) {
-    loginButton.addEventListener('click', () => {
-      window.location.href = '/login.html';
+    loginButton.addEventListener("click", () => {
+      window.location.href = "/login.html";
     });
   }
 }
 
-// Call the function when the DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   setupLoginButton();
 });
 
-// Export the function so it can be used elsewhere if needed
 export { setupLoginButton };

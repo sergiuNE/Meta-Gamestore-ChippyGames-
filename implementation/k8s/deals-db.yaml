@@ -1,6 +1,5 @@
-#StatefulSet
 apiVersion: apps/v1
-kind: StatefulSet #ipv Deployment
+kind: StatefulSet 
 metadata:
   name: deals-db
 spec:
@@ -42,7 +41,6 @@ spec:
           requests:
             storage: 1Gi
 ---
-#Service
 apiVersion: v1
 kind: Service
 metadata:

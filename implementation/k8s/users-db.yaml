@@ -1,4 +1,3 @@
-#Statefulset
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -42,7 +41,6 @@ spec:
           requests:
             storage: 1Gi
 ---
-#Service
 apiVersion: v1
 kind: Service
 metadata:
