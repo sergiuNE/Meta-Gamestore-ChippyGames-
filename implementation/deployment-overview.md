@@ -40,12 +40,10 @@ Elke service is afzonderlijk gecontaineriseerd en gedeployed in Kubernetes. De t
 
 ---
 
-## Database
+## Database (MySQL)
 
-- **Image**: `postgres:latest`
-- **Deployment bestand**: `k8s/deployment-db.yaml`
-- **Service bestand**: `k8s/service-db.yaml`
-- **Toegangspoort**: 5432
+- **Image**: `mysql:8.0`
+- **Toegangspoort**: 3306
 - **Gebruikt door**: `deal-service`, `user-service`, `platform-service`
 
 ---
@@ -69,7 +67,6 @@ Ingress-bestand: `k8s/ingress.yaml`
 
 1. Database-laag (automatisch)
 
-- PostgreSQL voor db-deployment
 - MySQL voor service-specifieke databases (deals-db, platforms-db, users-db)
 
 2. Microservices (deal, game, platform, user)

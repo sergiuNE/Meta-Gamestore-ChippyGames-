@@ -11,7 +11,7 @@ const PORT = 3003;
 app.use(cors());
 app.use(express.json());
 
-async function retryQuery(queryFn, retries = 3, delay = 500) { //Retries
+async function retryQuery(queryFn, retries = 3, delay = 500) {
   for (let i = 0; i < retries; i++) {
     try {
       return await queryFn();
@@ -23,7 +23,6 @@ async function retryQuery(queryFn, retries = 3, delay = 500) { //Retries
   }
 }
 
-// Dummy user list uit database
 app.get("/users", async (req, res) => {
   try {
     const [rows] = await retryQuery(() => pool.query("SELECT * FROM users"));
@@ -34,7 +33,6 @@ app.get("/users", async (req, res) => {
   }
 });
 
-// POST /auth - fake login
 app.post("/auth", async (req, res) => {
   const { mail, password } = req.body;
 
@@ -44,27 +42,22 @@ app.post("/auth", async (req, res) => {
     ]);
 
     if (rows.length === 0) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          message: "Ongeldige gebruikersnaam of wachtwoord.",
-        });
+      return res.status(401).json({
+        success: false,
+        message: "Ongeldige gebruikersnaam of wachtwoord.",
+      });
     }
 
     const user = rows[0];
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          message: "Ongeldige gebruikersnaam of wachtwoord.",
-        });
+      return res.status(401).json({
+        success: false,
+        message: "Ongeldige gebruikersnaam of wachtwoord.",
+      });
     }
 
-    //in producte secret key in een .env of secret config zetten
     const token = jwt.sign({ id: user.id, email: user.mail }, "SECRET_KEY", {
       expiresIn: "1h",
     });
@@ -73,7 +66,7 @@ app.post("/auth", async (req, res) => {
       success: true,
       message: "Ingelogd.",
       token,
-      user: { id: user.id, mail: user.mail }, // Beperk info
+      user: { id: user.id, mail: user.mail },
     });
   } catch (err) {
     console.error("Login fout:", err);
@@ -81,7 +74,6 @@ app.post("/auth", async (req, res) => {
   }
 });
 
-// Health
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
