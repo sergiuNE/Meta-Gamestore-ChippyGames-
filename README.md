@@ -14,19 +14,19 @@ A smart game comparison platform where gamers can:
 
 ## Main Features
 
-- 🎮 Filter by platforms and stores (PC, PlayStation, Xbox, Nintendo)
-- 💿 Find deals for physical games (discs and cartridges)
-- 🔜 Browse upcoming game releases
-- 🎬 Game details with screenshots, trailers, review scores and playtime info
-- 📸 Media uploads from both publishers and community members (with moderation)
-- 📚 Import your game collection automatically or manage it manually
-- ⭐ Rate any game (whether you own it or not)
-- 📊 Track price history across all stores and regions
-- 🔔 Set price alerts for games on your wishlist
-- 👍 Get game suggestions based on what you already like
-- 💰 Funding tracker showing affiliate income and user donations
-- ⚡ Keep working even when some game stores are down
-- 🏷️ Highlight big sales events across different stores
+- Filter by platforms and stores (PC, PlayStation, Xbox, Nintendo)
+- Find deals for physical games (discs and cartridges)
+- Browse upcoming game releases
+- Game details with screenshots, trailers, review scores and playtime info
+- Media uploads from both publishers and community members (with moderation)
+- Import your game collection automatically or manage it manually
+- Rate any game (whether you own it or not)
+- Track price history across all stores and regions
+- Set price alerts for games on your wishlist
+- Get game suggestions based on what you already like
+- Funding tracker showing affiliate income and user donations
+- Keep working even when some game stores are down
+- Highlight big sales events across different stores
 
 ---
 
@@ -39,7 +39,7 @@ This project explores two different ways to build the system:
 - Proposed style: **Layered** or **Modular** single system
 - Benefits: Easier to set up, test, and launch quickly
 
-### 🔹 Multi-Service Approach (With Working Kubernetes Demo)
+### Multi-Service Approach (With Working Kubernetes Demo)
 
 - Separate smaller systems for:
   - Game Database
@@ -75,7 +75,7 @@ This project explores two different ways to build the system:
   - Stays available when parts fail
   - Easy to update and improve
 
-- 📝 5+ Architecture Decision Records including:
+- 5+ Architecture Decision Records including:
   - Microservices Architecture
   - Kubernetes for Orchestration
   - CI/CD Pipeline Implementation
@@ -84,7 +84,7 @@ This project explores two different ways to build the system:
 
 ---
 
-## 🚀 Running the Demo (Kubernetes)
+## Running the Demo (Kubernetes)
 
 > Each service provides a basic API that returns sample data.
 
